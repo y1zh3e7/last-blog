@@ -336,7 +336,7 @@ pre .keyword,pre .javascript .function {color:#cc99cc;}
   .article .side {display:none}
   .comment .gt-btn-public .gt-btn-text:after{content:"";}
 }
-@media screen and (max-width:480px) {
+@media screen and (max-width:980px) {
   #post0 p:first-child {display:block;}
   #container:before {display:none;}
   #post0 h2 {text-align:left;margin:0 10px 0 0;}
