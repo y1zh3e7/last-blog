@@ -92,12 +92,12 @@
 <p>再次修改payload 将d0g3_f1ag.php的base64替换成/d0g3_fllllllag的base64 由于替换后长度依旧是20 所以不用修改其他部分</p>
 ]]></content>
       <categories>
-        <category>分类1</category>
-        <category>分类2</category>
+        <category>网安</category>
+        <category>web</category>
       </categories>
       <tags>
-        <tag>标签1</tag>
-        <tag>标签2</tag>
+        <tag>php</tag>
+        <tag>反序列化</tag>
       </tags>
   </entry>
 </search>
