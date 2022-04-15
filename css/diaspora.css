@@ -279,7 +279,7 @@ pre .function,pre .python .decorator,pre .python .title,pre .ruby .function .tit
 pre .keyword,pre .javascript .function {color:#cc99cc;}
 
 /* Responsive style */
-@media screen and (max-width:1200px) {
+@media screen and (max-width:1400px) {
   #header > div {width:900px;margin:0 auto;}
   #post0 {width:32%;}
   #post0 h2 {font-size:24px;}
@@ -297,7 +297,7 @@ pre .keyword,pre .javascript .function {color:#cc99cc;}
   .article .side {display:none}
   .comment .gt-btn-public .gt-btn-text:after{content:"";}
 }
-@media screen and (max-width:900px) {
+@media screen and (max-width:1400px) {
   #mark {height:480px;}
   #header > div {width:90%;}
   #vibrant polygon {transform:translateX(-10%);-moz-transform:translateX(-10%);-webkit-transform:translateX(-10%);}
@@ -316,7 +316,7 @@ pre .keyword,pre .javascript .function {color:#cc99cc;}
   .article .side {display:none}
   .comment .gt-btn-public .gt-btn-text:after{content:"";}
 }
-@media screen and (max-width:780px) {
+@media screen and (max-width:1400px) {
   #header {top:40px;}
   #vibrant svg {display:none;}
   #vibrant div {opacity:0.3;}
@@ -336,7 +336,7 @@ pre .keyword,pre .javascript .function {color:#cc99cc;}
   .article .side {display:none}
   .comment .gt-btn-public .gt-btn-text:after{content:"";}
 }
-@media screen and (max-width:980px) {
+@media screen and (max-width:1400px) {
   #post0 p:first-child {display:block;}
   #container:before {display:none;}
   #post0 h2 {text-align:left;margin:0 10px 0 0;}
