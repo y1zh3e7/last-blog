@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SSRF</title>
+    <url>/2022/04/16/SSRF/</url>
+    <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><h3 id="首先了解一个东西-内网和外网"><a href="#首先了解一个东西-内网和外网" class="headerlink" title="首先了解一个东西 内网和外网"></a>首先了解一个东西 内网和外网</h3><p>我们知道每一台计算机都有一个属于自己的ip 并且不只计算机 服务器（可以看作远程提供服务的计算机）也有自己的ip</p>
+<p>世界上那么多的计算机 而ip地址却只有12位 应该是不够分配的 所以这里提出了内网与外网 外网也叫公网 广域网 内网也叫局域网</p>
+<p>在企业，学校这种集体的地方会申请外网ip，也就是说该公司的唯一外网ip就是这个 在该外网ip下有很多的内网ip 也就是这个公司的员工的每一台计算机的ip</p>
+<p>所以外网ip是唯一的 而内网ip在它对应的外网ip下是唯一的 内网ip对于所有的ip地址来说是不唯一的 这样就解决了ip地址分配不够的问题</p>
+<p>并且内网的计算机在不连接到外网的情况下是不能上网的 我们家庭用的外网一般是营业厅的外网 内网ip则是由营业厅随机分配的 所以在互联网中进行交流依靠的都是公网 并且外网ip是可以被外界访问的 内网ip是不能直接被外界访问的</p>
+<h3 id="SSRF-1"><a href="#SSRF-1" class="headerlink" title="SSRF"></a>SSRF</h3><p>那么什么是ssrf呢</p>
+<p>刚才我们知道内网是不能直接从外界访问的 但是在某一内网ip所对应的公网内一定会有服务器来为该公网下的各内网计算机提供服务 也就是说服务器会对这些计算机发起各种各样的请求 如果我们能够将这些请求修改成我们自己的payload 就可以达成某些目的 所以ssrf叫做服务端请求伪造漏洞</p>
+<p>ssrf可能出现的地方：</p>
+<p>1.社交分享功能：获取超链接的标题等内容进行显示</p>
+<p>2.转码服务：通过URL地址把原地址的网页内容调优使其适合手机屏幕浏览</p>
+<p>3.在线翻译：给网址翻译对应网页的内容</p>
+<p>4.图片加载/下载：例如富文本编辑器中的点击下载图片到本地；通过URL地址加载或下载图片</p>
+<p>5.图片/文章收藏功能：主要其会取URL地址中title以及文本的内容作为显示以求一个好的用具体验</p>
+<p>6.云服务厂商：它会远程执行一些命令来判断网站是否存活等，所以如果可以捕获相应的信息，就可以进行ssrf测试</p>
+<p>7.网站采集，网站抓取的地方：一些网站会针对你输入的url进行一些信息采集工作</p>
+<p>8.数据库内置功能：数据库的比如mongodb的copyDatabase函数</p>
+<p>9.邮件系统：比如接收邮件服务器地址</p>
+<p>10.编码处理, 属性信息处理，文件处理：比如ffpmg，ImageMagick，docx，pdf，xml处理器等</p>
+<p>11.未公开的api实现以及其他扩展调用URL的功能：可以利用google 语法加上这些关键字去寻找SSRF漏洞</p>
+<p>一些的url中的关键字：share、wap、url、link、src、source、target、u、3g、display、sourceURl、imageURL、domain……</p>
+<p>12.从远程服务器请求资源（upload from url 如discuz！；import &amp; expost rss feed 如web blog；使用了xml引擎对象的地方 如wordpress xmlrpc.php）</p>
+]]></content>
+      <categories>
+        <category>网安</category>
+        <category>web</category>
+      </categories>
+      <tags>
+        <tag>php</tag>
+        <tag>SSRF服务端请求伪造</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>easy_serialize_php</title>
     <url>/2022/04/13/easy-serialize-php/</url>
     <content><![CDATA[<h2 id="安洵杯-2019-easy-serialize-php"><a href="#安洵杯-2019-easy-serialize-php" class="headerlink" title="[安洵杯 2019]easy_serialize_php"></a>[安洵杯 2019]easy_serialize_php</h2><p>==涉及函数：==</p>
