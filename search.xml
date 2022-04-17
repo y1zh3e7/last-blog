@@ -24,6 +24,13 @@
 <p>11.未公开的api实现以及其他扩展调用URL的功能：可以利用google 语法加上这些关键字去寻找SSRF漏洞</p>
 <p>一些的url中的关键字：share、wap、url、link、src、source、target、u、3g、display、sourceURl、imageURL、domain……</p>
 <p>12.从远程服务器请求资源（upload from url 如discuz！；import &amp; expost rss feed 如web blog；使用了xml引擎对象的地方 如wordpress xmlrpc.php）</p>
+<h3 id="SSRF-内网信息搜集"><a href="#SSRF-内网信息搜集" class="headerlink" title="SSRF 内网信息搜集"></a>SSRF 内网信息搜集</h3><p>上面提到 SSRF 可以让我们通过服务端与内网相连 所以就可以利用该漏洞渗透进内网 进行信息搜集 SSRF也可以看作是一种注入攻击 相比于在数据库中进行处理的sql注入 以及通过注入js代码从而返回到前端的xss注入 ssrf一般会有一个可控的参数 而该参数一般是一个url 我们将这个参数替换成我们恶意构造的url就可以实现某些目的 比如内网的某个ip地址的433端口设置了一个可以删除用户名的api 那么如果将参数修改为url:433 并经过服务端的处理 那么就可以达到远程删除的效果 但是在实际中 由于ip地址数量很多 而且每个内网ip下又有很多端口 所以一般采用字典爆破的方式查看哪一个ip下的哪一个的端口是可以被我们利用的 从而达到内网信息搜集的目的 包括爆破一些端口 查看哪些端口是开放的 哪些是关闭的</p>
+<h3 id="SSRF-Bypass（遇到新的会补充）"><a href="#SSRF-Bypass（遇到新的会补充）" class="headerlink" title="SSRF Bypass（遇到新的会补充）"></a>SSRF Bypass（遇到新的会补充）</h3><p>目前见到的防御方式：</p>
+<p>1.urldecode（）需要将参数进行url编码或者二次编码</p>
+<p>2.黑名单 白名单过滤</p>
+<p>3.正则表达式</p>
+<p>4.@绕过 比如 <a href="http://www.baidu.com@y1zh3e7.github.io/">http://www.baidu.com@y1zh3e7.github.io</a></p>
+<p>这里会自动删除前面的<a href="http://www.baidu.com/">www.baidu.com</a> 只保留后面的y1zh3e7.github.io</p>
 ]]></content>
       <categories>
         <category>网安</category>
