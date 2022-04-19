@@ -31,6 +31,11 @@
 <p>3.正则表达式</p>
 <p>4.@绕过 比如 <a href="http://www.baidu.com@y1zh3e7.github.io/">http://www.baidu.com@y1zh3e7.github.io</a></p>
 <p>这里会自动删除前面的<a href="http://www.baidu.com/">www.baidu.com</a> 只保留后面的y1zh3e7.github.io</p>
+<h3 id="SSRF-OOB"><a href="#SSRF-OOB" class="headerlink" title="SSRF OOB"></a>SSRF OOB</h3><p>在各种需要get post传值 发包的漏洞中，我们一般观察网页回显来判断payload是否被执行 以及payload被执行的情况 如果网站管理员设置了无回显 那么要怎么判断payload是否被执行 之前在rce中也遇到过此类问题 可以采用oob带外通道回显的方式</p>
+<p><a href="https://www.freebuf.com/articles/web/201013.html">带外通道技术（OOB）总结 - FreeBuf网络安全行业门户</a></p>
+<p>这里需要注意的是 以前外带时需要去ceye注册 很麻烦 在1.6.15版本的burp后添加了 Collaborato 模块 可以直接在burp里进行带外 所以这件事告诉我们要及时更新手头的工具！！！！</p>
+<p><a href="https://segmentfault.com/a/1190000021990948?sort=newest">Burp之Collaborator使用技巧 - SegmentFault 思否</a></p>
+<p><a href="https://www.freebuf.com/news/193447.html">Burpsuite Collaborato模块详解 - FreeBuf网络安全行业门户</a></p>
 ]]></content>
       <categories>
         <category>网安</category>
