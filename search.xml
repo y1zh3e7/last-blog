@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CSRF跨站请求伪造</title>
+    <url>/2022/04/22/CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</url>
+    <content><![CDATA[<h1 id="CSRF跨站请求伪造"><a href="#CSRF跨站请求伪造" class="headerlink" title="CSRF跨站请求伪造"></a>CSRF跨站请求伪造</h1><p>原理：通过携带用户在其他页面的cookie值或其他特征 盗用用户身份 达到自己的目的</p>
+<p><img src="https://s2.loli.net/2022/04/22/OzgRcBGUqe8Z7QT.png" alt="image-20220422190126603"></p>
+<p><a href="https://www.jianshu.com/p/7f33f9c7997b">浅谈CSRF - 简书 (jianshu.com)</a></p>
+<p>举个例子 </p>
+<p>我在页面A 有一个可以修改password的功能 我在页面A的Cookie值没有过期的情况下 去打开了攻击者构造的页面B</p>
+<p>如果页面A存在CSRF漏洞 那么此时用户的Cookie值可能就已经可以被携带了 并且攻击者在页面B恶意构造了修改password的内容 那么就会以用户的身份发起一个恶意的请求 达到修改password的目的</p>
+<p>可以在burp中自动生成一段攻击代码 其实就是生成了一段将值隐藏起来 并且写死的表单 改表单可以向目标网页发送一个修改表单的请求</p>
+<h3 id="CSRF-Token"><a href="#CSRF-Token" class="headerlink" title="CSRF Token"></a>CSRF Token</h3><p>为了防止CSRF漏洞的发生 网页A在进行一些敏感操作时可能会设定一串特殊的token值 来验证是否是可信任的用户</p>
+<p>但这里要区分一下Cookie Session 和 Token  首先Cookie是储存在网页中的一段特征值 用来验证用户身份 而Session则是储存在服务端 而Token则是可以储存在任何位置的一段特征值 通过后端验证Token是否匹配 来进行身份验证</p>
+<p>如果网页A对token的验证机制不完善 并且储存在了包文中 那么通过拦包的方式就可以拦截这串Token值 从而冒充了用户的身份</p>
+]]></content>
+      <categories>
+        <category>分类1</category>
+        <category>分类2</category>
+      </categories>
+      <tags>
+        <tag>标签1</tag>
+        <tag>标签2</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSRF</title>
     <url>/2022/04/16/SSRF/</url>
     <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><h3 id="首先了解一个东西-内网和外网"><a href="#首先了解一个东西-内网和外网" class="headerlink" title="首先了解一个东西 内网和外网"></a>首先了解一个东西 内网和外网</h3><p>我们知道每一台计算机都有一个属于自己的ip 并且不只计算机 服务器（可以看作远程提供服务的计算机）也有自己的ip</p>
