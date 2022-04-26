@@ -170,6 +170,80 @@
       </tags>
   </entry>
   <entry>
+    <title>动态网页基础原理-CGI</title>
+    <url>/2022/04/26/%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86-CGI/</url>
+    <content><![CDATA[<h1 id="动态网页基础原理-CGI"><a href="#动态网页基础原理-CGI" class="headerlink" title="动态网页基础原理-CGI"></a>动态网页基础原理-CGI</h1><p>以下内容来源于 <a href="https://mp.weixin.qq.com/s/BHYQNDcXXXr7U04lWwQdrg">全面了解CGI、FastCGI、PHP-FPM (qq.com)</a> 想看原文请移步 下面是我自己的总结和扩充</p>
+<h2 id="Web-Server传递数据的方法"><a href="#Web-Server传递数据的方法" class="headerlink" title="Web Server传递数据的方法"></a>Web Server传递数据的方法</h2><p>应该有不少人和我一样 在进行php开发时用的phpstudy来进行集成化的搭建环境 但是如果不用phpstudy那么在windows配置php开发环境时 应该经历这么几个步骤 </p>
+<p>1.安装php 和 apach</p>
+<p>2.在apache的配置文件（httpd.conf）添加并修改如下配置文件 这一步是为了让服务器能够解析php代码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加下边两行</span></span><br><span class="line">LoadModule php5_module D:/php/php5apache2_2.dll</span><br><span class="line">AddType application/x-httpd-php .php</span><br><span class="line"><span class="comment"># 修改如下内容</span></span><br><span class="line">&lt;IfModule dir_module&gt;</span><br><span class="line">    DirectoryIndex index.php index.html</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
+
+<p>linux环境下</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">./configure --with-mysql=/usr/local --with-apache=/usr/local/apache --enable-track-vars</span><br></pre></td></tr></table></figure>
+
+<p>原理都是用LoadModule加载php5_module 也就是把php作为apache的一个子模块来运行 当通过web访问php文件时 apache就会调用php5_module 来解析php代码</p>
+<p>但是php5_module又是如何将数据传给php的解析器来解析php代码的呢 这里就用到了sapi</p>
+<p>来看一下apache php和sapi之间的关系</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220426135529236.png" alt="image-20220426135529236"></p>
+<p>可以看出sapi是一个中间过程 sapi提供了一个和外部通信的接口，使得PHP可以和其他应用进行交互数据（apache，nginx等）。php默认提供了很多种sapi，常见的提供给apache和nginx的php5_module、CGI、FastCGI，给IIS的ISAPI，以及Shell的CLI。（httpd是Apache超文本传输协议(HTTP)服务器的主程序。被设计为一个独立运行的后台进程，它会建立一个处理请求的子进程或线程池）</p>
+<p>所以，以上的apache调用php执行的过程如下：</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">apache -&gt; httpd -&gt; php5_module -&gt; sapi -&gt; php</span><br></pre></td></tr></table></figure>
+
+<p>这种模式将ogo安装到apache中 每一次apache请求都会产生一条进程 这个进程就完整的包括php的各种运算记算等操作</p>
+<p>在上图中 apache每接收一个请求 都会生成一个进程来连接php 但是如果在同一时间点上收到了大量的请求（用户过多产生的问题 听起来有点像dos）服务器就会承受不住而崩溃 而且把php当作一个module加载到apache中 出问题时很难确定时php的问题还是服务器的问题</p>
+<h2 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a>CGI</h2><p>在整个网站架构中，Web服务器只是内容的分发者 举个例子 如果客户端请求的是index,html 那么Web Server会去文件系统中找到这个文件 发送给浏览器 这里分发的是静态数据</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220426141324714.png" alt="image-20220426141324714"></p>
+<p>如果请求的是index.php 根据配置文件 服务器知道这个不是静态文件 需要找php解析器来处理 那么他会把这个请求简单处理 交给php解析器</p>
+<p><img src="https://s2.loli.net/2022/04/26/NvO7WsjLlT5C1KY.png" alt="image-20220426141449993"></p>
+<p>当服务器收到index,php在收到index,php这个请求之后 会启动对应的CGI程序 这里就是php的解析器 接下来php解析器会解析php.ini文件 初始化执行环境 然后处理请求 再以规定CGI规定的格式返回处理后的结果 退出进程 服务器再把结果返回给浏览器 这就是一个完整的动态PHP Web访问流程 所以引出这几个词</p>
+<p><strong>CGI</strong>：是 Web Server 与 Web Application 之间数据交换的一种协议。</p>
+<p><strong>FastCGI</strong>：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。</p>
+<p><strong>PHP-CGI</strong>：是 PHP （Web Application）对 Web Server 提供的 CGI 协议的接口程序。</p>
+<p><strong>PHP-FPM</strong>：是 PHP（Web Application）对 Web Server 提供的 FastCGI 协议的接口程序，额外还提供了相对智能一些任务管理。</p>
+<p>（Web Server 一般指Apache、Nginx、IIS、Tomcat等服务器，Web Application 一般指PHP、Java、Asp.net等应用程序） </p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><strong>1、****CGI</strong></p>
+<p>CGI（Common Gateway Interface）全称是“通用网关接口”，WEB 服务器与PHP应用进行“交谈”的一种工具，其程序须运行在网络服务器上。CGI可以用任何一种语言编写，只要这种语言具有标准输入、输出和环境变量。如php、perl、tcl等。</p>
+<p>WEB服务器会传哪些数据给PHP解析器呢？URL、查询字符串、POST数据、HTTP header都会有。所以，CGI就是规定要传哪些数据，以什么样的格式传递给后方处理这个请求的协议。也就是说，CGI就是专门用来和 web 服务器打交道的。web服务器收到用户请求，就会把请求提交给cgi程序（如php-cgi），cgi程序根据请求提交的参数作应处理（解析php），然后输出标准的html语句，返回给web服服务器，WEB服务器再返回给客户端，这就是普通cgi的工作原理。（cgi程序，你就可以理解成遵循cgi协议编写的程序）</p>
+<p><strong>优点：</strong></p>
+<p>CGI的好处就是完全独立于任何服务器，仅仅是做为中间分子。提供接口给web服务器和web应用(如提nginx和php)。他们通过cgi搭线来完成数据传递。这样做的好处了尽量减少他们两个的关联，使他们变得更独立。</p>
+<p><strong>缺点：</strong></p>
+<p>但是CGI有个难受的地方，就是<strong>每一次</strong>web请求都会有启动和退出过程，也就是最为人诟病的fork-and-execute模式，这样一在大规模并发下，就死翘翘了。 </p>
+<p><strong>2、FastCGI</strong></p>
+<p>从根本上来说，FastCGI是用来提高CGI程序性能的。类似于CGI，FastCGI也可以说是一种协议。</p>
+<p>FastCGI像是一个常驻(long-live)型的CGI，它可以一直执行着，只要激活后，不会每次都要花费时间去fork一次。</p>
+<p>FastCGI是和语言无关的、可伸缩架构的CGI开放扩展，其主要行为是将CGI解释器进程保持在内存中，并因此获得较高的性能。众所周知，CGI解释器的反复加载是CGI性能低下的主要原因，如果CGI解释器保持在内存中，并接受FastCGI进程管理器调度，则可以提供良好的性能、伸缩性、Fail- Over特性等等。</p>
+<p><strong>举例：</strong></p>
+<p>当web server收到/index.php请求，看一下CGI程序和FastCGI程序分别是怎么处理的：</p>
+<p><strong>CGI：</strong>当收到web server请求后，会启动对应的CGI程序，这里就是PHP的解析器（php-cgi）。接下来PHP解析器会解析php.ini文件，初始化执行环境，然后处理请求，再以规定的CGI规定的格式返回处理后的结果，退出进程。（CGI每次接收到请求都会执行这些步骤）</p>
+<p><strong>FastCGI：</strong>首先，FastCGI程序会先启动一个master，解析配置环境，初始化执行环境，然后再启动多个worker。当请求过来时，master会传递给一个worker，然后立即可以接受下一个请求。这样就避免了重复的劳动，效率自然是高。而且当worker不够用时，master可以根据配置预先启动几个worker等着；当然空闲worker太多时，也会停掉一些，这样就提高了性能，也节约了资源，这就是fastcgi对进程的管理。（CGI程序和FastCGI程序，可以理解成遵循CGI协议和FastCGI协议编写的程序）</p>
+<p>FastCGI的工作原理：</p>
+<p>FastCGI接口方式采用C/S结构，可以将HTTP服务器和脚本解析服务器分开，同时在脚本解析服务器上启动一个或者多个脚本解析守护进程。当HTTP服务器每次遇到动态程序时，可以将其直接交付给FastCGI进程来执行，然后将得到的结果返回给浏览器。这种方式可以让HTTP服务器专一地处理静态请求，或者将动态脚本服务器的结果返回给客户端，这在很大程度上提高了整个应用系统的性能。 </p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220426143223300.png" alt="image-20220426143223300"></p>
+<p>（1）Web Server启动时载入FastCGI进程管理器（Apache Module或IIS ISAPI等)</p>
+<p>（2）FastCGI进程管理器自身初始化，启动多个CGI解释器进程(可建多个php-cgi)，并等待来自Web Server的连接。</p>
+<p>（3）当客户端请求到达Web Server时，FastCGI进程管理器选择并连接到一个CGI解释器。Web server将CGI环境变量和标准输入发送到FastCGI子进程php-cgi。</p>
+<p>（4）FastCGI子进程完成处理后，将标准输出和错误信息从同一连接返回Web Server。当FastCGI子进程关闭连接时，请求便告处理完成。FastCGI子进程接着等待，并处理来自FastCGI进程管理器(运行在Web Server中)的下一个连接。在CGI模式中，php-cgi在此便退出了。</p>
+<p>自己总结的fastcgi工作进程</p>
+<p>1.服务器启动 初始化fastcgi管理器</p>
+<p>2.fastcgi管理器自身初始化 创建多个fastcgi子进程 比如php-cgi/php-FPM</p>
+<p>3.客户端发送请求 比如index.php 服务端收到请求后由fastcgi管理器选择一个子进程（php-cgi）并传输解析index.php所需的环境及变量等</p>
+<p>4.子进程php-cgi进行环境配置并解析</p>
+<p>5.子进程php-cgi将解析后的输出以及报错结果返回服务端 服务端返回客户端进行回显</p>
+<p>6.子进程php-cgi结束进程 断开与fastcgi的连接 停止工作 fastcgi管理器接受下一个服务端请求 并再次执行以上操作 </p>
+<p>可以发现如果有较多请求同时处理 因为有很多php-cgi 所以服务端不会因请求量过大而崩溃 这就是fastcgi多进程的号出 但采取了空间换时间的方法 消耗了更多的服务器内存</p>
+<p>CGI与FastCGI比较：</p>
+<p>（1）对于CGI来说，每一个Web请求PHP都必须重新解析php.ini、重新载入全部扩展，并重新初始化全部数据结构。而使用FastCGI，所有这些都只在进程启动时发生一次。一个额外的好处是，持续数据库连接(Persistent database connection)可以工作。</p>
+<p>（2）由于FastCGI是多进程，所以比CGI多线程消耗更多的服务器内存，php-cgi解释器每进程消耗7至25兆内存，将这个数字乘以50或100就是很大的内存数。 </p>
+]]></content>
+      <categories>
+        <category>web</category>
+      </categories>
+      <tags>
+        <tag>php</tag>
+        <tag>CGI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝帽杯 2021 One Pointer PHP</title>
     <url>/2022/04/24/%E8%93%9D%E5%B8%BD%E6%9D%AF-2021-One-Pointer-PHP/</url>
     <content><![CDATA[<p>打开题拿源码 </p>
