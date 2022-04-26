@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JWT - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="JWT什么是JWTJSON Web Token ，通过数字签名的方式以JSON对象为载体 在不同的服务终端之间安全的传输信息
+JWT有什么用JWT最常见的是授权认证 一旦用户登录 后续每个请求都将包,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="JWT - y1zh3e7"/>
+    <meta name="twitter:description" content="JWT什么是JWTJSON Web Token ，通过数字签名的方式以JSON对象为载体 在不同的服务终端之间安全的传输信息
+JWT有什么用JWT最常见的是授权认证 一旦用户登录 后续每个请求都将包,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="JWT - y1zh3e7"/>
+    <meta property="og:description" content="JWT什么是JWTJSON Web Token ，通过数字签名的方式以JSON对象为载体 在不同的服务终端之间安全的传输信息
+JWT有什么用JWT最常见的是授权认证 一旦用户登录 后续每个请求都将包,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">JWT</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            JWT
+                        </h1>
+                        <div>
+                            <span>
+                                四月 26, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/JWT/" rel="tag">JWT</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                JWT
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    四月 26, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/JWT/" rel="tag">JWT</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.04.26</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><h2 id="什么是JWT"><a href="#什么是JWT" class="headerlink" title="什么是JWT"></a>什么是JWT</h2><p>JSON Web Token ，通过数字签名的方式以JSON对象为载体 在不同的服务终端之间安全的传输信息</p>
+<h2 id="JWT有什么用"><a href="#JWT有什么用" class="headerlink" title="JWT有什么用"></a>JWT有什么用</h2><p>JWT最常见的是授权认证 一旦用户登录 后续每个请求都将包含JWT 系统在每次处理用户的请求之前 都要先进行JWT安全校验 通过之后再进行处理</p>
+<h2 id="JWT的组成"><a href="#JWT的组成" class="headerlink" title="JWT的组成"></a>JWT的组成</h2><p>JWT由三部分组成 用.拼接 类似于下面的格式 三部分内容都是加密后的密文</p>
+<figure class="highlight json"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxx </span><br></pre></td></tr></table></figure>
+
+<p>三个部分分别是</p>
+<p>Header</p>
+<figure class="highlight json"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">&#x27;typ&#x27;<span class="punctuation">:</span> &#x27;JWT&#x27;<span class="punctuation">,</span>  <span class="comment">//类型</span></span><br><span class="line">&#x27;alg&#x27;<span class="punctuation">:</span> &#x27;HS256&#x27; <span class="comment">//Signature要用到的加密算法</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Payload 载荷 存放有效信息</p>
+<figure class="highlight json"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> &#x27;<span class="number">1234567890</span>&#x27;<span class="punctuation">,</span> <span class="comment">//</span></span><br><span class="line">	<span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> &#x27;john&#x27;<span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span><span class="keyword">true</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Payload中可标注的其他信息</p>
+<figure class="highlight json"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;iss&quot;</span><span class="punctuation">:</span> <span class="string">&quot;admin&quot;</span><span class="punctuation">,</span>          <span class="comment">//该JWT的签发者</span></span><br><span class="line">    <span class="attr">&quot;iat&quot;</span><span class="punctuation">:</span> <span class="number">1535967430</span><span class="punctuation">,</span>        <span class="comment">//签发时间</span></span><br><span class="line">    <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1535974630</span><span class="punctuation">,</span>        <span class="comment">//过期时间</span></span><br><span class="line">    <span class="attr">&quot;nbf&quot;</span><span class="punctuation">:</span> <span class="number">1535967430</span><span class="punctuation">,</span>         <span class="comment">//该时间之前不接收处理该Token</span></span><br><span class="line">    <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;www.admin.com&quot;</span><span class="punctuation">,</span>   <span class="comment">//面向的用户</span></span><br><span class="line">    <span class="attr">&quot;jti&quot;</span><span class="punctuation">:</span> <span class="string">&quot;9f10e796726e332cec401c569969e13e&quot;</span>   <span class="comment">//该Token唯一标识</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Signature 由三部分组成 base64加密后的header base64加密后的payload 以及前两个内容加密后的以Header中指定加密方式的二次加密</p>
+<figure class="highlight json"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">encodeString = base64UrlEncode(header) + &#x27;.&#x27; + base64UrlEncode(payload);</span><br><span class="line">signature = HMACSHA256(encodedString<span class="punctuation">,</span> &#x27;secret&#x27;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="JWT的使用流程"><a href="#JWT的使用流程" class="headerlink" title="JWT的使用流程"></a>JWT的使用流程</h2><p><strong>JWT的使用流程</strong></p>
+<ul>
+<li>初次登录：用户初次登录，输入用户名密码</li>
+<li>密码验证：服务器从数据库取出用户名和密码进行验证</li>
+<li>生成JWT：服务器端验证通过，根据从数据库返回的信息，以及预设规则，生成JWT</li>
+<li>返还JWT：服务器的HTTP RESPONSE中将JWT返还</li>
+<li>带JWT的请求：以后客户端发起请求，HTTP REQUEST</li>
+<li>HEADER中的Authorizatio字段都要有值，为JWT</li>
+<li>服务器验证JWT</li>
+</ul>
+<h2 id="PHP-生成JWT-Token"><a href="#PHP-生成JWT-Token" class="headerlink" title="PHP 生成JWT Token"></a>PHP 生成JWT Token</h2><figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * PHP实现jwt</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JwtAuth</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//头部</span></span><br><span class="line">  <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$header</span>=<span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;alg&#x27;</span>=&gt;<span class="string">&#x27;HS256&#x27;</span>, <span class="comment">//生成signature的算法</span></span><br><span class="line">    <span class="string">&#x27;typ&#x27;</span>=&gt;<span class="string">&#x27;JWT&#x27;</span>  <span class="comment">//类型</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">//使用HMAC生成信息摘要时所使用的密钥</span></span><br><span class="line">  <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$key</span>=<span class="string">&#x27;root123456&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取jwt token</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> array $payload jwt载荷  格式如下非必须</span></span><br><span class="line"><span class="comment">   * [</span></span><br><span class="line"><span class="comment">   * &#x27;iss&#x27;=&gt;&#x27;jwt_admin&#x27;, //该JWT的签发者</span></span><br><span class="line"><span class="comment">   * &#x27;iat&#x27;=&gt;time(), //签发时间</span></span><br><span class="line"><span class="comment">   * &#x27;exp&#x27;=&gt;time()+7200, //过期时间</span></span><br><span class="line"><span class="comment">   * &#x27;nbf&#x27;=&gt;time()+60, //该时间之前不接收处理该Token</span></span><br><span class="line"><span class="comment">   * &#x27;sub&#x27;=&gt;&#x27;www.mano100.cn&#x27;, //面向的用户</span></span><br><span class="line"><span class="comment">   * &#x27;jti&#x27;=&gt;md5(uniqid(&#x27;JWT&#x27;).time()) //该Token唯一标识</span></span><br><span class="line"><span class="comment">   * ]</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> bool|string</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getToken</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$payload</span></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">is_array</span>(<span class="variable">$payload</span>))</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="variable">$base64header</span>=<span class="built_in">self</span>::<span class="title function_ invoke__">base64UrlEncode</span>(<span class="title function_ invoke__">json_encode</span>(<span class="built_in">self</span>::<span class="variable">$header</span>,JSON_UNESCAPED_UNICODE));</span><br><span class="line">      <span class="variable">$base64payload</span>=<span class="built_in">self</span>::<span class="title function_ invoke__">base64UrlEncode</span>(<span class="title function_ invoke__">json_encode</span>(<span class="variable">$payload</span>,JSON_UNESCAPED_UNICODE));</span><br><span class="line">      <span class="variable">$token</span>=<span class="variable">$base64header</span>.<span class="string">&#x27;.&#x27;</span>.<span class="variable">$base64payload</span>.<span class="string">&#x27;.&#x27;</span>.<span class="built_in">self</span>::<span class="title function_ invoke__">signature</span>(<span class="variable">$base64header</span>.<span class="string">&#x27;.&#x27;</span>.<span class="variable">$base64payload</span>,<span class="built_in">self</span>::<span class="variable">$key</span>,<span class="built_in">self</span>::<span class="variable">$header</span>[<span class="string">&#x27;alg&#x27;</span>]);</span><br><span class="line">      <span class="keyword">return</span> <span class="variable">$token</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 验证token是否有效,默认验证exp,nbf,iat时间</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $Token 需要验证的token</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> bool|string</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">verifyToken</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$Token</span></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="variable">$tokens</span> = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;.&#x27;</span>, <span class="variable">$Token</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">count</span>(<span class="variable">$tokens</span>) != <span class="number">3</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">list</span>(<span class="variable">$base64header</span>, <span class="variable">$base64payload</span>, <span class="variable">$sign</span>) = <span class="variable">$tokens</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取jwt算法</span></span><br><span class="line">    <span class="variable">$base64decodeheader</span> = <span class="title function_ invoke__">json_decode</span>(<span class="built_in">self</span>::<span class="title function_ invoke__">base64UrlDecode</span>(<span class="variable">$base64header</span>), JSON_OBJECT_AS_ARRAY);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$base64decodeheader</span>[<span class="string">&#x27;alg&#x27;</span>]))</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//签名验证</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">self</span>::<span class="title function_ invoke__">signature</span>(<span class="variable">$base64header</span> . <span class="string">&#x27;.&#x27;</span> . <span class="variable">$base64payload</span>, <span class="built_in">self</span>::<span class="variable">$key</span>, <span class="variable">$base64decodeheader</span>[<span class="string">&#x27;alg&#x27;</span>]) !== <span class="variable">$sign</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$payload</span> = <span class="title function_ invoke__">json_decode</span>(<span class="built_in">self</span>::<span class="title function_ invoke__">base64UrlDecode</span>(<span class="variable">$base64payload</span>), JSON_OBJECT_AS_ARRAY);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//签发时间大于当前服务器时间验证失败</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$payload</span>[<span class="string">&#x27;iat&#x27;</span>]) &amp;&amp; <span class="variable">$payload</span>[<span class="string">&#x27;iat&#x27;</span>] &gt; <span class="title function_ invoke__">time</span>())</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//过期时间小宇当前服务器时间验证失败</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$payload</span>[<span class="string">&#x27;exp&#x27;</span>]) &amp;&amp; <span class="variable">$payload</span>[<span class="string">&#x27;exp&#x27;</span>] &lt; <span class="title function_ invoke__">time</span>())</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//该nbf时间之前不接收处理该Token</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$payload</span>[<span class="string">&#x27;nbf&#x27;</span>]) &amp;&amp; <span class="variable">$payload</span>[<span class="string">&#x27;nbf&#x27;</span>] &gt; <span class="title function_ invoke__">time</span>())</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$payload</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * base64UrlEncode  https://jwt.io/ 中base64UrlEncode编码实现</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $input 需要编码的字符串</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">base64UrlEncode</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$input</span></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;=&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="title function_ invoke__">strtr</span>(<span class="title function_ invoke__">base64_encode</span>(<span class="variable">$input</span>), <span class="string">&#x27;+/&#x27;</span>, <span class="string">&#x27;-_&#x27;</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * base64UrlEncode https://jwt.io/ 中base64UrlEncode解码实现</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $input 需要解码的字符串</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> bool|string</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">base64UrlDecode</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$input</span></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="variable">$remainder</span> = <span class="title function_ invoke__">strlen</span>(<span class="variable">$input</span>) % <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$remainder</span>) &#123;</span><br><span class="line">      <span class="variable">$addlen</span> = <span class="number">4</span> - <span class="variable">$remainder</span>;</span><br><span class="line">      <span class="variable">$input</span> .= <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;=&#x27;</span>, <span class="variable">$addlen</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">base64_decode</span>(<span class="title function_ invoke__">strtr</span>(<span class="variable">$input</span>, <span class="string">&#x27;-_&#x27;</span>, <span class="string">&#x27;+/&#x27;</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * HMACSHA256签名  https://jwt.io/ 中HMACSHA256签名实现</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $input 为base64UrlEncode(header).&quot;.&quot;.base64UrlEncode(payload)</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $key</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> string $alg  算法方式</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">signature</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$input</span>, <span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">string</span> <span class="variable">$alg</span> = <span class="string">&#x27;HS256&#x27;</span></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="variable">$alg_config</span>=<span class="keyword">array</span>(</span><br><span class="line">      <span class="string">&#x27;HS256&#x27;</span>=&gt;<span class="string">&#x27;sha256&#x27;</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">self</span>::<span class="title function_ invoke__">base64UrlEncode</span>(<span class="title function_ invoke__">hash_hmac</span>(<span class="variable">$alg_config</span>[<span class="variable">$alg</span>], <span class="variable">$input</span>, <span class="variable">$key</span>,<span class="literal">true</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
