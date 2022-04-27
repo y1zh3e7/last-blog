@@ -146,6 +146,57 @@ add_api.php
 
 <p>在源码页面构造个phpinfo()看一下 成功绕过</p>
 <p><img src="https://s2.loli.net/2022/04/24/kge6nv1tZl3FOAN.png" alt="image-20220424215950164"></p>
+<h3 id="第二个点-绕过open-basedir"><a href="#第二个点-绕过open-basedir" class="headerlink" title="第二个点 绕过open basedir"></a>第二个点 绕过open basedir</h3><p>在php.ini中可以通过设置open basedir来限制访问权限 放个学习连接</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/LLeaves/p/13210005.html">Open_basedir绕过 - LLeaves - 博客园 (cnblogs.com)</a></p>
+<p>绕过的方法很多 这里用glob伪协议绕一下 </p>
+<p>再放个过程中可能会看到的东西</p>
+<p><a target="_blank" rel="noopener" href="https://shipengliang.com/program-code/php-directoryiterator%E9%81%8D%E5%8E%86%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E5%85%A8%E9%83%A8%E6%96%87%E4%BB%B6.html">PHP-DirectoryIterator遍历目录文件夹下全部文件 | 时鹏亮的Blog (shipengliang.com)</a></p>
+<p>[浅析PHP原生类 - 知乎 (zhihu.com)](<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/458866772#:~:text=%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E9%85%8D%E5%90%88glob%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%9D%A5%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95">https://zhuanlan.zhihu.com/p/458866772#:~:text=可以直接配合glob伪协议来读取目录</a> 下面看一下效果图,这种姿势也可以无视open_basedir的限制 并且从图中就可以看出这两个原生类的些许区别了，Filesystemlterator会以绝路路径的形式展现，而DirectoryIterator仅显示出当前目录下的文件信息)</p>
+<p>已经可以eval了 直接连一下蚁剑 这里可能会有问题 为什么hackbar发送的是assert 而蚁剑还能用eval连接 assert我们知道就是执行php代码 eval也是  核心部分是可控的post参数 所以只要可以执行这个参数就可以</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425161106882.png" alt="image-20220425161106882"></p>
+<p>蚁剑连接的时候别忘了设置一下cookie</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425161133422.png" alt="image-20220425161133422"></p>
+<p>在根目录下找到flag 但是发现是空的 原因是php ini中设置了open basedir 限制了我们的访问 可以在phpinfo中看到</p>
+<p>也就是说我们可访问的范围只有/var/www/html 但如果在www下有一个叫html1的也是可以访问的 因为openbasedir筛选的是路径的前缀 具体的移步上面的学习链接</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425162432733.png" alt="image-20220425162432733"></p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425162515210.png" alt="image-20220425162515210"></p>
+<p>使用glob伪协议绕过 写一段脚本上传</p>
+<p>w3这里有opendir的例子 正好可以拿来用 在路径前面加个伪协议就行了</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425164747436.png" alt="image-20220425164747436"></p>
+<p>上传并访问 修改路径后还是读取不了flag 换一种方式绕过</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220425164816700.png" alt="image-20220425164816700"></p>
+<p>用set_ini和chdir()进行绕过    payload是这样的</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/add_api.php?backdoor=<span class="title function_ invoke__">mkdir</span>(<span class="string">&#x27;y1zh3e7&#x27;</span>);<span class="title function_ invoke__">chdir</span>(<span class="string">&#x27;y1zh3e7&#x27;</span>);<span class="title function_ invoke__">ini_set</span>(<span class="string">&#x27;open_basedir&#x27;</span>,<span class="string">&#x27;..&#x27;</span>);<span class="title function_ invoke__">chdir</span>(<span class="string">&#x27;..&#x27;</span>);<span class="title function_ invoke__">chdir</span>(<span class="string">&#x27;..&#x27;</span>);<span class="title function_ invoke__">chdir</span>(<span class="string">&#x27;..&#x27;</span>);<span class="title function_ invoke__">chdir</span>(<span class="string">&#x27;..&#x27;</span>);<span class="title function_ invoke__">ini_set</span>(<span class="string">&#x27;open_basedir&#x27;</span>,<span class="string">&#x27;/&#x27;</span>);<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">scandir</span>(<span class="string">&#x27;/&#x27;</span>));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我看了很多大佬的解释都有点迷 自己总结了一下</p>
+<p>**set_ini 和chdir() 绕过open_basedir: **</p>
+<p>先举个例子 比如我现在在 /var/www/html下</p>
+<p>1.如果openbasedir限制的目录是我们现在所在目录 就要在该目录下新建一个子目录 </p>
+<p>所以有了mkdir(‘y1zh3e7’) 并切换到这个子目录   </p>
+<p>当前目录：/var/www/html/y1zh3e7       open_basedir限制目录：/var/www/html</p>
+<p>2.通过ini_set修改open_basedir的参数 可以看到上面将限制目录修改成了相对上一级目录 </p>
+<p>当前目录：/var/www/html/y1zh3e7       open_basedir限制目录：/var/www/html</p>
+<p>3.通过chdir返回上一级目录 </p>
+<p>当前目录：/var/www/html       open_basedir限制目录：/var/www</p>
+<p>4.再返回一级</p>
+<p>当前目录：/var/www       open_basedir限制目录：/var</p>
+<p>5.再返回一级目录</p>
+<p>当前目录：/var      open_basedir限制目录：/</p>
+<p>成功拿到查看根目录的权限 其实再返回几次也是可以的  因为根目录再往上一级还是根目录</p>
+<p><img src="https://s2.loli.net/2022/04/27/cY843SLql2wUOVG.png" alt="image-20220427095928253"></p>
+<h3 id="第三个点-linux系统下的信息泄露-proc"><a href="#第三个点-linux系统下的信息泄露-proc" class="headerlink" title="第三个点 linux系统下的信息泄露 proc"></a>第三个点 linux系统下的信息泄露 proc</h3><p>这里更换路径为flag 还是不能读取  这里涉及到了关于proc的知识 放个连接 再补充一下</p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/241148">Proc 目录在 CTF 中的利用 - 安全客，安全资讯平台 (anquanke.com)</a></p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1.cmdline(文件)</span><br><span class="line">	cmdline 文件存储着启动当前进程的完整命令，但僵尸进程目录中的此文件不包含任何信息。可以通过查看cmdline目录获取启动指定进程的完整命令</span><br><span class="line">我们可以使用爆破file_get_contents(&#x27;/proc/§§/cmdline&#x27;);的方法得到全部当前执行的程序</span><br><span class="line">2.cwd(目录软链接)</span><br><span class="line">	cwd 文件是一个指向当前进程运行目录的符号链接。可以通过查看cwd文件获取目标指定进程环境的运行目录(就是一个目录的软链接)</span><br><span class="line">3.exe(当前进程的可执行文件)</span><br><span class="line">	exe 是一个指向启动当前进程的可执行文件（完整路径）的符号链接。通过exe文件我们可以获得指定进程的可执行文件的完整路径</span><br><span class="line">4.environ(文件)</span><br><span class="line">	environ文件存储着当前进程的环境变量列表，彼此间用空字符（NULL）隔开，变量用大写字母表示，其值用小写字母表示。可以通过查看environ目录来获取指定进程的环境变量信息：</span><br><span class="line">5.fd</span><br><span class="line">	fd是一个目录，里面包含着当前进程打开的每一个文件的描述符（file descriptor）差不多就是路径啦，这些文件描述符是指向实际文件的一个符号连接，即每个通过这个进程打开的文件都会显示在这里。所以我们可以通过fd目录的文件获取进程，从而打开每个文件的路径以及文件内容</span><br><span class="line">6.maps(文件)</span><br><span class="line">	/proc/meminfo可以看到整个系统内存消耗情况,基于里面信息能大概判断泄露的内存的属性，是哪个区域在泄漏、对应哪个文件。辅助工具procmem输出更可读的maps信息</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>利用self 和 proc拿到提示 在题目环境开启时启动了fpm 回到phpinfo也有相关信息 关于php-fpm 以及 fast-cgi移步我的另一篇博客</p>
+<p><a href="https://y1zh3e7.github.io/2022/04/26/%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86-CGI/">动态网页基础原理-CGI - y1zh3e7</a></p>
+<p><img src="https://s2.loli.net/2022/04/27/RJSPjwWomAr1lXd.png" alt="image-20220427102838855"></p>
+<p><img src="https://s2.loli.net/2022/04/27/V9quFbCNocWZw4n.png" alt="image-20220427102512492">、</p>
+<p>接下来就有两个办法了 通过访问/proc/self/maps 可以发现一个bypass的so文件 会pwn的师傅可以下载下来pwn一下 </p>
+<p><img src="https://s2.loli.net/2022/04/27/gjoc4dmuQUYnNyS.png" alt="image-20220427103252380"></p>
+<p>不会pwn的话就用FTP协议打fpm的方式进行绕过</p>
+<h3 id="第四个点-FTP协议打php-fpm"><a href="#第四个点-FTP协议打php-fpm" class="headerlink" title="第四个点 FTP协议打php-fpm"></a>第四个点 FTP协议打php-fpm</h3><p>放个P牛链接 </p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html">Fastcgi协议分析 &amp;&amp; PHP-FPM未授权访问漏洞 &amp;&amp; Exp编写 | 离别歌 (leavesongs.com)</a></p>
 
                                     <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
                                     <audio id="audio" loop="1" preload="auto" controls="controls"

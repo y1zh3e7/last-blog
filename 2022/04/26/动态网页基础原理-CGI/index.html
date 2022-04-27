@@ -175,7 +175,7 @@ Web Server传递数据的方法应该有不少人和我,"/>
 <p>可以发现如果有较多请求同时处理 因为有很多php-cgi 所以服务端不会因请求量过大而崩溃 这就是fastcgi多进程的号出 但采取了空间换时间的方法 消耗了更多的服务器内存</p>
 <p>CGI与FastCGI比较：</p>
 <p>（1）对于CGI来说，每一个Web请求PHP都必须重新解析php.ini、重新载入全部扩展，并重新初始化全部数据结构。而使用FastCGI，所有这些都只在进程启动时发生一次。一个额外的好处是，持续数据库连接(Persistent database connection)可以工作。</p>
-<p>（2）由于FastCGI是多进程，所以比CGI多线程消耗更多的服务器内存，php-cgi解释器每进程消耗7至25兆内存，将这个数字乘以50或100就是很大的内存数。 </p>
+<p>（2）由于FastCGI是多进程，所以比CGI多线程消耗更多的服务器内存，php-cgi解释器每进程消耗7至25兆内存，将这个数字乘以50或100就是很大的内存数。<br>再放一个p牛的利用fpm的一个漏洞<br><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html">Fastcgi协议分析 &amp;&amp; PHP-FPM未授权访问漏洞 &amp;&amp; Exp编写 | 离别歌 (leavesongs.com)</a></p>
 
                                     <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
                                     <audio id="audio" loop="1" preload="auto" controls="controls"
