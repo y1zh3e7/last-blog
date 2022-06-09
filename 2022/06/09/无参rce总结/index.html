@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>无参rce总结 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="无参RCE之前假期做题的时候做到过一次无参rce 但是当时水平不太够很多地方都看不懂 今天正好又遇到了就总结一下
+什么是无参RCE先看一段正则
+123456&amp;lt;?php	if(&amp;#x27;;&amp;#,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="无参rce总结 - y1zh3e7"/>
+    <meta name="twitter:description" content="无参RCE之前假期做题的时候做到过一次无参rce 但是当时水平不太够很多地方都看不懂 今天正好又遇到了就总结一下
+什么是无参RCE先看一段正则
+123456&amp;lt;?php	if(&amp;#x27;;&amp;#,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="无参rce总结 - y1zh3e7"/>
+    <meta property="og:description" content="无参RCE之前假期做题的时候做到过一次无参rce 但是当时水平不太够很多地方都看不懂 今天正好又遇到了就总结一下
+什么是无参RCE先看一段正则
+123456&amp;lt;?php	if(&amp;#x27;;&amp;#,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">无参rce总结</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            无参rce总结
+                        </h1>
+                        <div>
+                            <span>
+                                六月 09, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/RCE/" rel="tag">RCE</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E6%A0%87%E7%AD%BE2/" rel="tag">标签2</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                无参rce总结
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    六月 09, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/RCE/" rel="tag">RCE</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E6%A0%87%E7%AD%BE2/" rel="tag">标签2</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.06.09</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="无参RCE"><a href="#无参RCE" class="headerlink" title="无参RCE"></a>无参RCE</h1><p><strong>之前假期做题的时候做到过一次无参rce 但是当时水平不太够很多地方都看不懂 今天正好又遇到了就总结一下</strong></p>
+<h2 id="什么是无参RCE"><a href="#什么是无参RCE" class="headerlink" title="什么是无参RCE"></a>什么是无参RCE</h2><p>先看一段正则</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;exp&#x27;</span>])) &#123; </span><br><span class="line"> 		     <span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;exp&#x27;</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>看着很乱 一点点分析一下</strong></p>
+<p><strong>最外层的引号和一对//就不多说了 正则表达的框架</strong></p>
+<h6 id="W-W-表示除了-数字字母下划线-以外的字符-前面有个-表示对该结果集进行取反-也就是数字字母下划线-等同于-w-这里注意-这个符号在-外面表示正则开始的位置-而在-里面则表示对后面的正则结果进行去反-也就是取补集"><a href="#W-W-表示除了-数字字母下划线-以外的字符-前面有个-表示对该结果集进行取反-也就是数字字母下划线-等同于-w-这里注意-这个符号在-外面表示正则开始的位置-而在-里面则表示对后面的正则结果进行去反-也就是取补集" class="headerlink" title="[^/W]  ==/W==表示除了 数字字母下划线 以外的字符 前面有个==^==表示对该结果集进行取反 也就是数字字母下划线 等同于/w 这里注意==^== 这个符号在[]外面表示正则开始的位置 而在[]里面则表示对后面的正则结果进行去反 也就是取补集"></a><strong>[^/W]</strong>  ==/W==表示除了 数字字母下划线 以外的字符 前面有个==^==表示对该结果集进行取反 也就是数字字母下划线 等同于/w 这里注意==^== 这个符号在[]外面表示正则开始的位置 而在[]里面则表示对后面的正则结果进行去反 也就是取补集</h6><p><strong><code>+</code>  量词 表示前面的正则匹配一次或多次 那么<code>[^/W]+</code>就表示匹配多个数字字母下划线 如果没有+ 那么匹配的只有一个字节 比如   <code>a    b   _    1</code>       有了+量词之后 就可以匹配单词或多个字节组成的词  比如<code>y1zh3e7</code></strong></p>
+<p><strong>\  转义符 不要因为正则太复杂懵了 后面的转义也是 也就是说明这对括号==(==<code>(?R)?\</code>==)== 就是一对括号 没别的意思 注意这对括号里的正则是作用在这个括号里 后面提到的递归也就是对括号里的内容进行递归匹配</strong> </p>
+<p><strong>(?R)   这个地方比较难理解 可以直接记住 (?R)是整个正则表达式 也就是<code>[^\W]+\((?R)?\)</code></strong> </p>
+<p><strong>?        代表将前面的正则进行贪婪匹配 看一下前面的正则是什么 (?R) 是整个正则表达式 也就是再次进行相同的匹配 也就是递归</strong></p>
+<p><strong>那么梳理一下逻辑 前面的<code>[^/W]</code>代表可以输一个词组 后面的括号里不能输入任何数字字母下划线 也就是说exp的赋值只能是一个没有参数的函数 所以这里就引出了无参RCE</strong></p>
+<p><strong>举个例子 exp 可以是 <code>a(b(c()d()))</code></strong> </p>
+<p><strong>这里有人可能会问了 这个<code>a()</code> 里面难道不是有<code>b(c()d())</code> 吗 同理b也是 为什么可以绕过呢</strong></p>
+<p><strong>首先我们要明确一个点 正则匹配是从左到右对参数进行匹配 并且只有在一个完整的匹配后才会继续进行匹配 那么上面这个参数中 第一个完整的匹配是哪个呢 应该是<code>c()</code> 而第二个应该是<code>d()</code>  因为匹配到这里的时候a和b的右面的一半括号还没有匹配到 也就是说现在匹配到的a和b其实是 <code>a(</code> 和  <code>b(</code>  并不是一个完整的正则  所以先替换为空的就是<code>c()和d()</code> 最终不断递归把a也吃掉了 所以绕过的方法就是使用php中的无参函数进行绕过</strong></p>
+<h2 id="姿势1-amp-姿势2"><a href="#姿势1-amp-姿势2" class="headerlink" title="姿势1&amp;姿势2"></a>姿势1&amp;姿势2</h2><h3 id="getallheaders-amp-get-defined-vars"><a href="#getallheaders-amp-get-defined-vars" class="headerlink" title="getallheaders()&amp;get_defined_vars()"></a>getallheaders()&amp;get_defined_vars()</h3><p><strong>getallheaders 这个函数有一些限制条件 必须是服务器为apache时才可以使用 它可以以数组形式返回http头 那么我们在burp中通过增加或修改请求头的方式就可以返回一些恶意构造的代码 如果这时程序中正好有一个可用的后门 就可以直接执行</strong></p>
+<p><strong>get_defined_vars() 与上一个类似 但是没有了apache的局限条件 它可以获取的四个全局变量<code>$_GET $_POST $_FILES $_COOKIE</code>，而它的返回值是一个二维数组 我们利用<code>GET</code>方式传入的参数在第一个数组中 这里我们就需要先将二维数组转换为一维数组 这里我们用到<code>current()</code>函数 这个函数的作用是返回数组中的当前单元 而它的默认是第一个单元 也就是我们GET方式传入的参数 所以局限性就是只能在get传参时和current()搭配使用</strong></p>
+<h2 id="姿势3"><a href="#姿势3" class="headerlink" title="姿势3"></a>姿势3</h2><h2 id="session-id"><a href="#session-id" class="headerlink" title="session_id()"></a>session_id()</h2><p><strong>原理是通过highlight_file进行源码读取 如果该文件代码包含了flag文件 那么就可以直接读取flag了</strong></p>
+<p><strong>首先 由于php并不会自动开启session 所以要自己开启一个session对话</strong> </p>
+<p><strong>session_start()</strong></p>
+<p><strong>这个方法的可控参数是Cookie中的SESSID 当session_start 后就会产生一个SESSID  在包文中可以我们自己进行修</strong>改</p>
+<p><strong>payload: <code>highlight_file(session_id(session_start))</code></strong></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>以上就是对无参rce的总结 不同环境应用的函数不同 从本质上来说就是应用无参函数进行rce</strong></p>
+<p><strong>详细例子移步<a target="_blank" rel="noopener" href="https://www.cnblogs.com/pursue-security/p/15406272.html#_label1_1">RCE篇之无参数rce - 学安全的小白 - 博客园 (cnblogs.com)</a></strong></p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
