@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>XSS跨站脚本攻击 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="XSS跨站脚本攻击XSS原理在前端开发三大件中 html组成了网页的框架 css组成 了网页的外貌 而JavaScript使整个网页动了起来 
+对于任何一个成熟的网站 JavaScript都是不可或,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="XSS跨站脚本攻击 - y1zh3e7"/>
+    <meta name="twitter:description" content="XSS跨站脚本攻击XSS原理在前端开发三大件中 html组成了网页的框架 css组成 了网页的外貌 而JavaScript使整个网页动了起来 
+对于任何一个成熟的网站 JavaScript都是不可或,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="XSS跨站脚本攻击 - y1zh3e7"/>
+    <meta property="og:description" content="XSS跨站脚本攻击XSS原理在前端开发三大件中 html组成了网页的框架 css组成 了网页的外貌 而JavaScript使整个网页动了起来 
+对于任何一个成熟的网站 JavaScript都是不可或,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">XSS跨站脚本攻击</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            XSS跨站脚本攻击
+                        </h1>
+                        <div>
+                            <span>
+                                七月 20, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/XSS/" rel="tag">XSS</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                XSS跨站脚本攻击
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    七月 20, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/XSS/" rel="tag">XSS</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.07.20</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="XSS跨站脚本攻击"><a href="#XSS跨站脚本攻击" class="headerlink" title="XSS跨站脚本攻击"></a>XSS跨站脚本攻击</h1><h2 id="XSS原理"><a href="#XSS原理" class="headerlink" title="XSS原理"></a>XSS原理</h2><p>在前端开发三大件中 html组成了网页的框架 css组成 了网页的外貌 而JavaScript使整个网页动了起来 </p>
+<p>对于任何一个成熟的网站 JavaScript都是不可或缺的 xss从根本上讲 也是注入攻击的一种 对于注入攻击我们肯定不陌生 比如</p>
+<ul>
+<li>SQL注入 </li>
+</ul>
+<p>恶意payload与数据库进行交互 造成了数据库信息的泄露或其他危害</p>
+<ul>
+<li>模板注入</li>
+</ul>
+<p>在某一模板中 由于渲染函数以及对前端过滤的不严 通过不断调用父类最终在某一可用类中使用一些系统函数去读取敏感内容</p>
+<p>xss注入则是将JavaScript代码注入到网页中 在网页打开时必然会执行这些被恶意注入的JavaScript代码 这种攻击手法就叫做xss</p>
+<p>阅读以下内容时 请保证你已经有了一定的JavaScript基础！！！！</p>
+<h2 id="XSS的分类"><a href="#XSS的分类" class="headerlink" title="XSS的分类"></a>XSS的分类</h2><h3 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h3><p>我们从代码入手</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"> <span class="variable">$a</span> = <span class="variable">$_GET</span>[a];</span><br><span class="line">     <span class="keyword">echo</span> <span class="variable">$a</span>;</span><br><span class="line">     <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在当我给a传值后 会在网页中输出 我们通过f12可以看见 输出的内容是作为了一个Dom的元素写在了html中（不懂什么是Dom的可以先看下面的Dom型XSS）</p>
+<p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207201513934.png" alt="image-20220720151307828"></p>
+<p>如果我们将a传值为 <code>&lt;script&gt;alert(&#39;hacker!!!&#39;)&lt;/script&gt;</code>呢</p>
+<p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207201514842.png" alt="image-20220720151450794"></p>
+<p>可以发现成功弹窗了</p>
+<p>从f12中可以看到 由于我们将可执行的脚本代码写入了html中 导致了网页执行该内容</p>
+<p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207201516785.png" alt="image-20220720151606758"></p>
+<p>如果我把这个url发给victim（当然localhost肯定不行 我懒得在服务器上开个服务了）victim在打开这个url的时候就中招了 有人可能会问这恶意url肯定一看就看出来了 这里有个骚操作 生成短链接 具体的建议移步百度</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/test.php?a=%3Cscript%3Ealert(%27hacker!!!%27)%3C/script%3E</span><br></pre></td></tr></table></figure>
+
+<p>这种经过后端代码并且需要victim传入相应的恶意payload触发就叫做反射型xss</p>
+<h2 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h2><p>上面反射型的xss是将payload写入网页前端代码中使恶意payload执行 如果想要victim中招 就需要victim再次传入恶意payload</p>
+<p>那么试想这种情况 如果在这个网站内有一个所有用户都需要的功能（比如注册功能）注册功能一定会有对数据库进行写入的操作 如果这时我将恶意的脚本代码写入到数据库中 并且在网站的其他地方会将这些恶意的内容回显到网页上 那么这时使用网站的用户就会中招 并不需要victim自己传入恶意payload  因为hacker已经将恶意的payload注入到了某一长时间存在的地方（不一定是数据库 只要是在服务器上可以长久存在的就可以）当网站的其他用户需要使用回显该payload的内容时就会触发 这种经过后端代码并且长久的存在在服务器上的XSS叫做存储型XSS</p>
+<h2 id="Dom型XSS"><a href="#Dom型XSS" class="headerlink" title="Dom型XSS"></a>Dom型XSS</h2><h3 id="Dom和Bom"><a href="#Dom和Bom" class="headerlink" title="Dom和Bom"></a>Dom和Bom</h3><p>我们现在把一个网页想象成一颗树 我们现在站在远处去看 并不能看到这棵树的细节（例如枝干 叶片这些）我们只能看到这一棵树 那么这一颗树就是一个Bom 我们带换到网页中去 当你打开了一个浏览器会弹出一个窗口 窗口内就是网页的内容 那么这一整个窗口就是一个Bom 他代表了整个网页</p>
+<p>现在我们走近仔细去看这棵树 我们发现这棵树上有很多的树叶和树枝 那么在网页这棵树上 每一个元素就是一片树叶 每一个树叶和树枝（Dom元素）组成了这棵Dom树 如果我们想要访问某一个树叶（网页元素）我们都可以在这棵Dom树上找到 总而言之 Dom树就是网页中所有的元素组成的一个整体 而Bom不但包括了这些元素 还包括了这棵树的其他部分 最终组成了Bom</p>
+<p>不管是Bom还是Dom都是网页的一种对象模型</p>
+<p>那么回到Dom型XSS 我们知道JavaScript可以通过各种各样的功能操作Dom元素 一般通过url触发 如果使用JavaScript来捕获了url中传递的某一参数并将其放到前端代码中 就会造成恶意脚本代码的执行 由于这些恶意代码没有经过后端 所以无法被后端过滤 这种XSS就是Dom型XSS（其实也是反射型的一种 只不过没有经过后端）</p>
+<p>到这里可以看到 XSS针对的攻击对象并不是网站的所有者 而是使用该网站的用户</p>
+<h2 id="如何执行JS代码"><a href="#如何执行JS代码" class="headerlink" title="如何执行JS代码"></a>如何执行JS代码</h2><p>除了在<code>&lt;script&gt;</code>标签中 我们可以通过Dom事件直接将恶意payload写在html中并触发</p>
+<p>比如</p>
+<figure class="highlight html"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Tittle<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">onclick</span>=<span class="string">&quot;alert(&#x27;hacker!!!!&#x27;)&quot;</span>&gt;</span>clickme<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当点击clickme时  就会触发恶意弹窗</p>
+<p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207201551089.png" alt="image-20220720155125043"></p>
+<p>当然还有其他的Dom事件 这里就不多说了</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/jsref/dom-obj-event.html">HTML DOM 事件对象 | 菜鸟教程 (runoob.com)</a></p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
