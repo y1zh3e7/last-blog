@@ -352,6 +352,86 @@
       </tags>
   </entry>
   <entry>
+    <title>Nodejs原型链污染</title>
+    <url>/2022/07/30/Nodejs%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/</url>
+    <content><![CDATA[<h1 id="Nodejs原型链污染"><a href="#Nodejs原型链污染" class="headerlink" title="Nodejs原型链污染"></a>Nodejs原型链污染</h1><h2 id="Nodejs与JavaScript和JSON"><a href="#Nodejs与JavaScript和JSON" class="headerlink" title="Nodejs与JavaScript和JSON"></a>Nodejs与JavaScript和JSON</h2><p>有一些人在学习JavaScript时会分不清Nodejs和JavaScript之间的区别 如果没有node 那么我们的JavaScript代码则由浏览器中的JavaScript解析器进行解析 几乎所有的浏览器都配备了JavaScript的解析功能（最出名的就是google的v8） 这也是为什么我们能在f12中直接执行JavaScript的原因  而Nodejs则是由这个解析器单独从浏览器中拿出来 并进行了一系列的处理 最后成为了一个可以在服务端运行JavaScript的环境  这里看到一个很好的例子 学过java的师傅应该就明白了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207300014261.png" alt="image-20220730001418207"></p>
+<p>那么JSON又是什么呢 简单概括一下就是JavaScript的对象表示方法 它表示的是声明对象的一种格式  由于我们从前端接收到的数据基本都是字符串 因此在服务端如果要将这些字符串处理为其他格式 比如对象 就需要用到JSON了 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207300023195.png" alt="image-20220730002328146"></p>
+<h2 id="原型对象（prototype）与原型连接点（-proto-）与原型链"><a href="#原型对象（prototype）与原型连接点（-proto-）与原型链" class="headerlink" title="原型对象（prototype）与原型连接点（__proto__）与原型链"></a>原型对象（<code>prototype</code>）与原型连接点（<code>__proto__</code>）与原型链</h2><p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301459737.png" alt="image-20220730145926681"></p>
+<p>在c++或java这些面向对象的语言中 我们如果想要一个对象首先需要使用关键字class声明一个类 再使用关键字new一个对象出来 但是在JavaScript中没有class 以及类这种概念（为了简化编写JavaScript代码，ECMAScript 6后增加了<code>class</code>语法，但<code>class</code>其实只是一个语法糖） 在JavaScript有这么两种声明对象的方式 为了好理解我们先引入类的思想</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">person=<span class="keyword">new</span> <span class="title class_">Object</span>()</span><br><span class="line">person.<span class="property">firstname</span>=<span class="string">&quot;John&quot;</span>;</span><br><span class="line">person.<span class="property">lastname</span>=<span class="string">&quot;Doe&quot;</span>;</span><br><span class="line">person.<span class="property">age</span>=<span class="number">50</span>;</span><br><span class="line">person.<span class="property">eyecolor</span>=<span class="string">&quot;blue&quot;</span>;</span><br><span class="line"></span><br><span class="line">这种创建对象的方法还有另一种写法 如下</span><br><span class="line">person=&#123;<span class="attr">firstname</span>:<span class="string">&quot;John&quot;</span>,<span class="attr">lastname</span>:<span class="string">&quot;Doe&quot;</span>,<span class="attr">age</span>:<span class="number">50</span>,<span class="attr">eyecolor</span>:<span class="string">&quot;blue&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">这种方法通过直接实例化构造方法<span class="title class_">Object</span>()来创建对象</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">person</span>(<span class="params">firstname,lastname,age,eyecolor</span>)  这里创建了一个“类” 但是在<span class="title class_">JavaScript</span>中叫做构造函数或者构造器</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">firstname</span>=firstname;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">lastname</span>=lastname;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span>=age;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">eyecolor</span>=eyecolor;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myFather=<span class="keyword">new</span> <span class="title function_">person</span>(<span class="string">&quot;John&quot;</span>,<span class="string">&quot;Doe&quot;</span>,<span class="number">50</span>,<span class="string">&quot;blue&quot;</span>);	通过这个“类”实例化对象</span><br><span class="line"><span class="keyword">var</span> myMother=<span class="keyword">new</span> <span class="title function_">person</span>(<span class="string">&quot;Sally&quot;</span>,<span class="string">&quot;Rally&quot;</span>,<span class="number">48</span>,<span class="string">&quot;green&quot;</span>);</span><br><span class="line"></span><br><span class="line">这种方法先创建构造函数 再实例化构造函数 构造函数<span class="keyword">function</span>也属于<span class="title class_">Object</span> 如果对这里为什么属于<span class="title class_">Object</span>而不属于<span class="title class_">Function</span>有疑问请继续阅读 下面会解释</span><br></pre></td></tr></table></figure>
+
+<p>既然是通过实例化Object来创建对象或创建构造函数</p>
+<p> 在JavaScript中有两个很特殊的对象 Function() 和 Object()  它们两个既是构造函数也是对象 作为对象是不是应该有一个“类”去作为他们的模板呢</p>
+<p>对于Object()来说 要声明这么一个构造函数我们可以使用关键字function来创建 （在底层 使用function创建一个函数 其实就相当于这个过程） </p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Object</span>(<span class="params"></span>)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">在底层为</span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Object</span> = <span class="keyword">new</span> <span class="title class_">Function</span>();</span><br></pre></td></tr></table></figure>
+
+<p>那么对于Function自己这个对象他是怎么来的呢 如果用Function.<code>__proto__</code>和Function.prototype进行比较发现二者是全等的 所以Function创造了自己 也创造了Object 所以JavaScript中 所有函数都是对象 而对象是通过函数创建的 因此<code>构造函数.prototype.__proto__ </code>应该是Object.prototype 而不是Function.prototype   Function的作用是创建而不是继承</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301402091.png" alt="image-20220730140259067"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301401083.png" alt="image-20220730140053998"></p>
+<p>那么提到了<code>__proto__</code>和<code>prototype</code>我们就来说说这两个是什么东西</p>
+<p>首先我们要了解以下概念</p>
+<ul>
+<li><code>__proto__</code>是任何一个对象拥有的属性    <code>prototype</code>是任何一个函数拥有的一个属性  </li>
+</ul>
+<p>比如</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">person=&#123;<span class="attr">firstname</span>:<span class="string">&quot;John&quot;</span>,<span class="attr">lastname</span>:<span class="string">&quot;Doe&quot;</span>,<span class="attr">age</span>:<span class="number">50</span>,<span class="attr">eyecolor</span>:<span class="string">&quot;blue&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>那么这个person对象就拥有了<code>person.__proto__</code>这个属性 而Object()我们刚才提到了是由Function创建来的一个构造函数 那么Object就天生有了Object.prototype </p>
+<ul>
+<li><p>某一对象的 <code>__proto__</code>指向它的prototype（原型对象） 也就是说如果直接访问<code>person.__proto__</code> 那么就相当于访问了Object.prototype</p>
+</li>
+<li><p>JavaScript使用prototype链实现继承机制</p>
+</li>
+<li><p>构造函数xxx.prototype是一个对象 xxx.prototype也有自己的<code>__proto__</code>属性 并且可以继续指向它的的prototype</p>
+</li>
+<li><p>Object.prototype.proto最终指向null 这也是所有原型链的终点</p>
+</li>
+</ul>
+<p>有条件的师傅也可以把下面的视频合集看一下 对理解原型和原型链有很大的帮助</p>
+<p><a href="https://www.bilibili.com/video/BV1ci4y157Ci?p=4&spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=ce28d3130b8ba56f85e090c857c00132">4_Function与Object的特殊性_哔哩哔哩_bilibili</a></p>
+<p> 如果我们有如下代码：</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Father</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">first_name</span> = <span class="string">&#x27;Donald&#x27;</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">last_name</span> = <span class="string">&#x27;Trump&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Son</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">first_name</span> = <span class="string">&#x27;Melania&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Son</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title class_">Father</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> son = <span class="keyword">new</span> <span class="title class_">Son</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Name: <span class="subst">$&#123;son.first_name&#125;</span> <span class="subst">$&#123;son.last_name&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+
+<p>那么按照上述说法 就有如下结构</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301504781.png" alt="image-20220730150413742"></p>
+<p>对于对象son，在调用<code>son.last_name</code>的时候，实际上JavaScript引擎会进行如下操作：</p>
+<ol>
+<li>在对象son中寻找last_name</li>
+<li>如果找不到，则在<code>son.__proto__</code>中寻找last_name</li>
+<li>如果仍然找不到，则继续在<code>son.__proto__.__proto__</code>中寻找last_name</li>
+<li>依次寻找，直到找到<code>null</code>结束。</li>
+</ol>
+<h2 id="原型链污染"><a href="#原型链污染" class="headerlink" title="原型链污染"></a>原型链污染</h2><p>举个栗子</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这个对象直接实例化Object()</span></span><br><span class="line"><span class="keyword">let</span> foo = &#123;<span class="attr">bar</span>: <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo.bar 此时为1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(foo.<span class="property">bar</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改foo的原型（即Object）</span></span><br><span class="line">foo.<span class="property">__proto__</span>.<span class="property">bar</span> = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 由于查找顺序的原因，foo.bar仍然是1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(foo.<span class="property">bar</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时再用Object创建一个空的zoo对象</span></span><br><span class="line"><span class="keyword">let</span> zoo = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看zoo.bar</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zoo.<span class="property">bar</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301540927.png" alt="image-20220730154030880"></p>
+<p>这里由于修改了<code>foo.__proto__.bar</code> 也就是修改了Object.bar 因此在后续的实例化对象中 新的对象会继承这一属性 造成了原型链污染</p>
+<p>在实际应用中，哪些情况下可能存在原型链能被攻击者修改的情况呢？</p>
+<p>我们思考一下，哪些情况下我们可以设置<code>__proto__</code>的值呢？其实找找能够控制数组（对象）的“键名”的操作即可</p>
+<p>看下面代码 一个简单的对象clone</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">merge</span>(<span class="params">target, source</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key <span class="keyword">in</span> source &amp;&amp; key <span class="keyword">in</span> target) &#123;  </span><br><span class="line">            <span class="comment">// 如果target与source有相同的键名 则让target的键值为source的键值</span></span><br><span class="line">            <span class="title function_">merge</span>(target[key], source[key])</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            target[key] = source[key]  <span class="comment">// 如果target与source没有相通的键名 则直接在target新建键名并赋给键值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> o1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> o2 = &#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="string">&quot;__proto__&quot;</span>: &#123;<span class="attr">b</span>: <span class="number">2</span>&#125;&#125;</span><br><span class="line"><span class="title function_">merge</span>(o1, o2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o1.<span class="property">a</span>, o1.<span class="property">b</span>)</span><br><span class="line"></span><br><span class="line">o3 = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o3.<span class="property">b</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301550219.png" alt="image-20220730155049173"></p>
+<p>这里执行后发现 虽然两个对象成功clone 但是Object()并没用被污染 这是因为在创建o2时 <code>__proto__</code>是已经存在于o2中的属性了 解析器并不能将这个属性解析为键值 所以要用JSON去修改代码（前面我们说了 JSON是JavaScript的对象表示方法 可以将字符串转换为对象） 这样就可以使<code>__proto__</code>被成功解析成键名了</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> o1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> o2 = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="string">&#x27;&#123;&quot;a&quot;: 1, &quot;__proto__&quot;: &#123;&quot;b&quot;: 2&#125;&#125;&#x27;</span>)</span><br><span class="line"><span class="title function_">merge</span>(o1, o2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o1.<span class="property">a</span>, o1.<span class="property">b</span>)</span><br><span class="line"></span><br><span class="line">o3 = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o3.<span class="property">b</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207301555313.png" alt="image-20220730155547273"></p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>这里先留个坑 这篇文章写了一整天一直在改 参考了很多视频和文章 复现就留到过几天再更新吧</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript">深入理解 JavaScript Prototype 污染攻击 | 离别歌 (leavesongs.com)</a></p>
+<p><a href="https://www.bilibili.com/video/BV1ci4y157Ci?p=1&vd_source=ce28d3130b8ba56f85e090c857c00132">【全网首发:已完结】快速搞懂『原型、原型链』【JavaScript基础专题】_哔哩哔哩_bilibili</a></p>
+]]></content>
+      <categories>
+        <category>网安</category>
+      </categories>
+      <tags>
+        <tag>原型链污染</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSRF</title>
     <url>/2022/04/16/SSRF/</url>
     <content><![CDATA[<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><h3 id="首先了解一个东西-内网和外网"><a href="#首先了解一个东西-内网和外网" class="headerlink" title="首先了解一个东西 内网和外网"></a>首先了解一个东西 内网和外网</h3><p>我们知道每一台计算机都有一个属于自己的ip 并且不只计算机 服务器（可以看作远程提供服务的计算机）也有自己的ip</p>
