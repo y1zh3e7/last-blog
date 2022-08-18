@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>kali安装和配置 狗看了都会 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="Kali以下内容根据deelmind视频做出的总结 原版请移步b站deelmind
+什么是KaliKali Linux 是一个基于Debian Linux的操作系统 （Debian是众多Linux系,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="kali安装和配置 狗看了都会 - y1zh3e7"/>
+    <meta name="twitter:description" content="Kali以下内容根据deelmind视频做出的总结 原版请移步b站deelmind
+什么是KaliKali Linux 是一个基于Debian Linux的操作系统 （Debian是众多Linux系,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="kali安装和配置 狗看了都会 - y1zh3e7"/>
+    <meta property="og:description" content="Kali以下内容根据deelmind视频做出的总结 原版请移步b站deelmind
+什么是KaliKali Linux 是一个基于Debian Linux的操作系统 （Debian是众多Linux系,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">kali安装和配置 狗看了都会</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            kali安装和配置 狗看了都会
+                        </h1>
+                        <div>
+                            <span>
+                                八月 18, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/kali/" rel="tag">kali</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                kali安装和配置 狗看了都会
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    八月 18, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/kali/" rel="tag">kali</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.08.18</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>以下内容根据deelmind视频做出的总结 原版请移步b站deelmind</p>
+<h2 id="什么是Kali"><a href="#什么是Kali" class="headerlink" title="什么是Kali"></a>什么是Kali</h2><p>Kali Linux 是一个基于Debian Linux的操作系统 （Debian是众多Linux系统中的一种类型）在Kali上安装了很多渗透测试 逆向破解 流量分析等等一系列工具 实质为一个预先安装了很多网络安全工具的Linux操作系统</p>
+<h2 id="Kali安装"><a href="#Kali安装" class="headerlink" title="Kali安装"></a>Kali安装</h2><p>我们通常选择将kali安装在虚拟机上 虚拟机我使用的是VMware 当然VirtualBox也是可以的 VMware的安装我就不多说了 百度上教程很多 随便找一个跟着安装就行了 主要说一下kali的安装</p>
+<p>安装前先了解一下科学上网（应该都会吧） 因为kali和一些其他工具的下载都在外网</p>
+<p>因为kali的镜像源是在外网 下载速度及其感人 所以我们要用到一个下载神器IDM 它可以将要下载的东西分块下载 大大提高了下载效率</p>
+<p>IDM下载地址</p>
+<p><a target="_blank" rel="noopener" href="https://www.internetdownloadmanager.com/download.html">Download the latest free trial version of Internet Download Manager</a> 点那个绿色的download就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181819083.png" alt="image-20220818181931918"></p>
+<p>下载好后我们在浏览器里配置IDM插件 （我用的Chorme）</p>
+<p>根据IDM上的提示在浏览器中下载插件 并且打开无痕模式启用选项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181822838.png" alt="image-20220818182244755"></p>
+<p>然后来到kali官方下载镜像</p>
+<p>kali官方安装地址</p>
+<p><a target="_blank" rel="noopener" href="https://www.kali.org/get-kali/#kali-bare-metal">https://www.kali.org/get-kali/#kali-bare-metal</a></p>
+<p>选择虚拟机 Virtual Machines</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181823832.png" alt="image-20220818182350738"></p>
+<p>在VMware上右击鼠标 选择使用IDM下载</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181824139.png" alt="image-20220818182438076"></p>
+<p>换一下路径下载即可（不要下载到c盘）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181825220.png" alt="image-20220818182530173"></p>
+<p>解压之后有一个后缀为<code>.vmx</code>的文件 这个就是我们要用到的镜像文件 （解压工具推荐7zip）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181859811.png" alt="image-20220818185916745"></p>
+<p>接下来在VMware中打开这个镜像文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181901716.png" alt="image-20220818190152686"></p>
+<p>开机即可 我们在左下角的描述中可以看到一些信息 包括登录的username 和 passwd 两个都是kali</p>
+<p>开机登录即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181901840.png" alt="image-20220818190134767"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181904059.png" alt="image-20220818190437830"></p>
+<h2 id="Kali-root设置-amp-换源"><a href="#Kali-root设置-amp-换源" class="headerlink" title="Kali root设置&amp;换源"></a>Kali root设置&amp;换源</h2><h3 id="kali-root用户修改密码"><a href="#kali-root用户修改密码" class="headerlink" title="kali root用户修改密码"></a>kali root用户修改密码</h3><p>root用户指的是拥有最高权限的用户 在我们执行一些需要权限的命令时需要使用root 因此直接用root登录会比较方便</p>
+<p>右键选择Open Terminal 打开终端</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181912058.png" alt="image-20220818191230991"></p>
+<p>输入 (注意linux中的粘贴是<code>shift+ins</code>复制是<code>ctrl+ins</code> 如果用不明白建议鼠标右键复制粘贴 在终端右键 选择paste selection)</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181914928.png" alt="image-20220818191456882"></p>
+<p>在终端输入kali（刚才开机kali用的密码） 回车（看不见敲的密码属于正常情况）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181916307.png" alt="image-20220818191601270"></p>
+<p>设置root用户的新密码 输入后回车 一共输入两次 出现这样的提示就是修改成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181918987.png" alt="image-20220818191801953"></p>
+<p>关机kali 再开机（重启貌似会导致密码修改失败）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181918303.png" alt="image-20220818191843260"></p>
+<p>这时候就可以用root 和刚才修改好的密码登录了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181922038.png" alt="image-20220818192227982"></p>
+<h3 id="kali换源"><a href="#kali换源" class="headerlink" title="kali换源"></a>kali换源</h3><p>终端输入</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181934471.png" alt="image-20220818193415436"></p>
+<p>注释掉官方镜像源并添加中科大的源 如图</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181951156.png" alt="image-20220818195108113"></p>
+<p>粘贴后分别按 <code>ctrl+x,y,回车</code>保存修改</p>
+<p>终端输入</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+
+<p>如果出现这种情况 可能是刚才换源时文档后面有很多空格 再次输入<code>nano /etc/apt/sources.list</code> 把<code>deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</code>后面所有的空格删干净 保存退出后再次执行<code>apt update</code>即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181950868.png" alt="image-20220818195049827"></p>
+<p>这样就算是换源成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181953914.png" alt="image-20220818195342875"></p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

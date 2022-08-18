@@ -637,6 +637,76 @@
       </tags>
   </entry>
   <entry>
+    <title>kali安装和配置 狗看了都会</title>
+    <url>/2022/08/18/kali%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-%E7%8B%97%E7%9C%8B%E4%BA%86%E9%83%BD%E4%BC%9A/</url>
+    <content><![CDATA[<h1 id="Kali"><a href="#Kali" class="headerlink" title="Kali"></a>Kali</h1><p>以下内容根据deelmind视频做出的总结 原版请移步b站deelmind</p>
+<h2 id="什么是Kali"><a href="#什么是Kali" class="headerlink" title="什么是Kali"></a>什么是Kali</h2><p>Kali Linux 是一个基于Debian Linux的操作系统 （Debian是众多Linux系统中的一种类型）在Kali上安装了很多渗透测试 逆向破解 流量分析等等一系列工具 实质为一个预先安装了很多网络安全工具的Linux操作系统</p>
+<h2 id="Kali安装"><a href="#Kali安装" class="headerlink" title="Kali安装"></a>Kali安装</h2><p>我们通常选择将kali安装在虚拟机上 虚拟机我使用的是VMware 当然VirtualBox也是可以的 VMware的安装我就不多说了 百度上教程很多 随便找一个跟着安装就行了 主要说一下kali的安装</p>
+<p>安装前先了解一下科学上网（应该都会吧） 因为kali和一些其他工具的下载都在外网</p>
+<p>因为kali的镜像源是在外网 下载速度及其感人 所以我们要用到一个下载神器IDM 它可以将要下载的东西分块下载 大大提高了下载效率</p>
+<p>IDM下载地址</p>
+<p><a href="https://www.internetdownloadmanager.com/download.html">Download the latest free trial version of Internet Download Manager</a> 点那个绿色的download就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181819083.png" alt="image-20220818181931918"></p>
+<p>下载好后我们在浏览器里配置IDM插件 （我用的Chorme）</p>
+<p>根据IDM上的提示在浏览器中下载插件 并且打开无痕模式启用选项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181822838.png" alt="image-20220818182244755"></p>
+<p>然后来到kali官方下载镜像</p>
+<p>kali官方安装地址</p>
+<p><a href="https://www.kali.org/get-kali/#kali-bare-metal">https://www.kali.org/get-kali/#kali-bare-metal</a></p>
+<p>选择虚拟机 Virtual Machines</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181823832.png" alt="image-20220818182350738"></p>
+<p>在VMware上右击鼠标 选择使用IDM下载</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181824139.png" alt="image-20220818182438076"></p>
+<p>换一下路径下载即可（不要下载到c盘）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181825220.png" alt="image-20220818182530173"></p>
+<p>解压之后有一个后缀为<code>.vmx</code>的文件 这个就是我们要用到的镜像文件 （解压工具推荐7zip）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181859811.png" alt="image-20220818185916745"></p>
+<p>接下来在VMware中打开这个镜像文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181901716.png" alt="image-20220818190152686"></p>
+<p>开机即可 我们在左下角的描述中可以看到一些信息 包括登录的username 和 passwd 两个都是kali</p>
+<p>开机登录即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181901840.png" alt="image-20220818190134767"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181904059.png" alt="image-20220818190437830"></p>
+<h2 id="Kali-root设置-amp-换源"><a href="#Kali-root设置-amp-换源" class="headerlink" title="Kali root设置&amp;换源"></a>Kali root设置&amp;换源</h2><h3 id="kali-root用户修改密码"><a href="#kali-root用户修改密码" class="headerlink" title="kali root用户修改密码"></a>kali root用户修改密码</h3><p>root用户指的是拥有最高权限的用户 在我们执行一些需要权限的命令时需要使用root 因此直接用root登录会比较方便</p>
+<p>右键选择Open Terminal 打开终端</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181912058.png" alt="image-20220818191230991"></p>
+<p>输入 (注意linux中的粘贴是<code>shift+ins</code>复制是<code>ctrl+ins</code> 如果用不明白建议鼠标右键复制粘贴 在终端右键 选择paste selection)</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181914928.png" alt="image-20220818191456882"></p>
+<p>在终端输入kali（刚才开机kali用的密码） 回车（看不见敲的密码属于正常情况）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181916307.png" alt="image-20220818191601270"></p>
+<p>设置root用户的新密码 输入后回车 一共输入两次 出现这样的提示就是修改成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181918987.png" alt="image-20220818191801953"></p>
+<p>关机kali 再开机（重启貌似会导致密码修改失败）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181918303.png" alt="image-20220818191843260"></p>
+<p>这时候就可以用root 和刚才修改好的密码登录了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181922038.png" alt="image-20220818192227982"></p>
+<h3 id="kali换源"><a href="#kali换源" class="headerlink" title="kali换源"></a>kali换源</h3><p>终端输入</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">nano /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181934471.png" alt="image-20220818193415436"></p>
+<p>注释掉官方镜像源并添加中科大的源 如图</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181951156.png" alt="image-20220818195108113"></p>
+<p>粘贴后分别按 <code>ctrl+x,y,回车</code>保存修改</p>
+<p>终端输入</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+
+<p>如果出现这种情况 可能是刚才换源时文档后面有很多空格 再次输入<code>nano /etc/apt/sources.list</code> 把<code>deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib</code>后面所有的空格删干净 保存退出后再次执行<code>apt update</code>即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181950868.png" alt="image-20220818195049827"></p>
+<p>这样就算是换源成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208181953914.png" alt="image-20220818195342875"></p>
+]]></content>
+      <categories>
+        <category>渗透测试</category>
+      </categories>
+      <tags>
+        <tag>kali</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>preg_match e模式下的代码执行漏洞</title>
     <url>/2022/06/09/preg-match-e%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="preg-match-e-模式下的代码执行漏洞"><a href="#preg-match-e-模式下的代码执行漏洞" class="headerlink" title="preg_match e 模式下的代码执行漏洞"></a>preg_match e 模式下的代码执行漏洞</h1><h2 id="漏洞可利用php版本"><a href="#漏洞可利用php版本" class="headerlink" title="漏洞可利用php版本"></a>漏洞可利用php版本</h2><ul>
