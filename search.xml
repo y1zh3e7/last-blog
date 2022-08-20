@@ -787,6 +787,96 @@
       </tags>
   </entry>
   <entry>
+    <title>关于转义符在php正则中的匹配问题</title>
+    <url>/2022/08/21/%E5%85%B3%E4%BA%8E%E8%BD%AC%E4%B9%89%E7%AC%A6-%E5%9C%A8php%E6%AD%A3%E5%88%99%E4%B8%AD%E7%9A%84%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="关于转义符-在php正则中的匹配问题"><a href="#关于转义符-在php正则中的匹配问题" class="headerlink" title="关于转义符 \ 在php正则中的匹配问题"></a>关于转义符 \ 在php正则中的匹配问题</h1><p>参考文章：<a href="https://www.jianshu.com/p/076c5b422c96">从一道CTF的非预期解看PHP反斜杠匹配问题 - 简书 (jianshu.com)</a></p>
+<p>今天做题遇到一个很经典的问题 记录一下 先看一段代码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$str</span> = <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="variable">$pattern</span> = <span class="string">&quot;/\\/&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$partern</span>,<span class="variable">$str</span>,<span class="variable">$arr</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    <span class="title function_ invoke__">print_r</span>(<span class="variable">$arr</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;false&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 看到这段代码的师傅们 思考一下 会输出success还是false</p>
+<p>输出false 正则没有被匹配到 为什么呢</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202208602.png" alt="image-20220820220805568"></p>
+<h2 id="php对转义符的解析"><a href="#php对转义符的解析" class="headerlink" title="php对转义符的解析"></a>php对转义符的解析</h2><p>php解析正则时分为了两个步骤 一个是php对字符串的解析 之后才是对正则的解析 那么php在解析字符串时什么时候才会将<code>\</code>解析为转义呢 只有在某一字符会对这一语句产生混淆时 php才会将<code>\</code>解析为转义 </p>
+<p>分析一个正则匹配</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202331404.png" alt="image-20220820233147371"></p>
+<p>首先php对字符串进行解析：</p>
+<p>在这种情况下可以看到str中<code>\</code>并没有被当成转义符</p>
+<p>而在pattern中 由于有多个<code>\</code>并且在正则表达式中存在<code>/</code> 会混淆正则表达式的边界 因此这四个转义符的作用分别是：</p>
+<ul>
+<li>第一个转义符转义第二个转义符</li>
+<li>第三个转义符转义第四个转义符 第五个转义符转义<code>/</code> </li>
+</ul>
+<p>因此php最终解析出的str为 <code>\/</code> pattern为 <code>\\/</code></p>
+<p>到preg_match时 进行正则解析（正则解析只解析正则表达式）：</p>
+<ul>
+<li>将pattern中的 <code>\\/</code> 解析为<code>\/</code> （第一个转义符转义了第二个转义符）</li>
+</ul>
+<p>经过php和正则的解析后 我们可以发现str与pattern是一样的字符串了 所以应该会输出success 并且匹配到的部分为<code>\/</code></p>
+<p>验证成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202339177.png" alt="image-20220820233913117"></p>
+<p>这里提出一个问题 如果在pattern中 我的正则内容中不想使用<code>\</code>来转义<code>/</code> 并且还想输出success 那应该怎么修改正则内容呢</p>
+<p>我们刚才提到 转义是为了防止语句中的字符产生混淆 <code>/</code>与正则边界产生了混淆 所以我们用其他的字符作为边界就好了 比如<code>#</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202343736.png" alt="image-20220820234345677"></p>
+<p>总结：在一般情况下 只有字符串中的某一字符会对该语句产生混淆 这时该符号前的<code>\</code>才具有转义作用</p>
+<p>这里我在做测试有一个小坑 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202348365.png" alt="image-20220820234819307"></p>
+<p>首先php的字符串解析： 可以看到由于字符串中并没有可能会产生混淆语句的字符 因此<code>\</code>都没有转义作用</p>
+<p>正则进行解析（只解析正则表达式 不解析其他字符串）：pattern中的<code>\/</code>被解析成了<code>/</code>  </p>
+<p>因此最终的正则匹配是在字符串<code>\/</code>中匹配<code>/</code> 因此输出了<code>/</code></p>
+<p>这里我一开始以为str中的<code>\</code>也发挥了转义作用 其实并不是</p>
+<p>回到最初的问题 为什么输出了false</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$str</span> = <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="variable">$pattern</span> = <span class="string">&quot;/\\/&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$partern</span>,<span class="variable">$str</span>,<span class="variable">$arr</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    <span class="title function_ invoke__">print_r</span>(<span class="variable">$arr</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;false&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按照上面的流程分析 </p>
+<p>首先php进行字符串解析：</p>
+<ul>
+<li>str被解析为<code>\</code> pattern被解析为<code>\</code></li>
+</ul>
+<p>进行正则表达式解析：</p>
+<ul>
+<li>pattern中含有转义符<code>\</code> 现在正则需要这个转义符去发挥转义作用 但在正则表达式中已经没有其他字符去转义了 导致了正则表达式的解析错误 pattern最终被解析成了什么我们也不知道</li>
+</ul>
+<p>所以最终在进行正则匹配时会输出false  </p>
+<p>那么我们应该怎么让它输出success呢</p>
+<h2 id="php正则如何正确匹配"><a href="#php正则如何正确匹配" class="headerlink" title="php正则如何正确匹配\"></a>php正则如何正确匹配<code>\</code></h2><p>刚才我们提到在正则解析时只剩下了一个<code>\</code> 导致了解析的错误 那么如果我们在正则解析这步剩下两个<code>\</code>是不是就可以在正则解析中保留下一个<code>\</code>呢？ 再往前推 如果想要正则解析这步里保留两个<code>\</code> 那么在定义partern字符串的时候我们是不是要写四个<code>\</code>才可以？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210016164.png" alt="image-20220821001642109"></p>
+<p>具体的解析过程我就不讲了 跟上面是完全一样的 </p>
+<p>总结：php在正则中匹配<code>\</code>时需要在正则表达式中写入四个<code>\</code></p>
+<h2 id="一道ctf题的分析"><a href="#一道ctf题的分析" class="headerlink" title="一道ctf题的分析"></a>一道ctf题的分析</h2><p>题目来源：[安洵杯 2019]easy_web wp移步主页查找 如果没有就是还没写完</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed|bzmore|bzless|pcre|paste|diff|file|echo|sh|\&#x27;|\&quot;|\`|;|,|\*|\?|\\|\\\\|\n|\t|\r|\xA0|\&#123;|\&#125;|\(|\)|\&amp;[^\d]|@|\||\\$|\[|\]|&#123;|&#125;|\(|\)|-|&lt;|&gt;/i&quot;</span>, <span class="variable">$cmd</span>)) &#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">&quot;forbid ~&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在在这一段代码中对传入的cmd命令进行了过滤 并且可以看到其中有四个反斜杠 对<code>\</code>做出了过滤 但最后仍然可以用反斜线逃逸 <code>ca\t l\s</code>执行命令  这是为什么呢</p>
+<p>按照我们上面所说的进行分析 首先php对字符串进行解析</p>
+<ul>
+<li> <code>\\</code>被解析为<code>\</code></li>
+<li><code>\\\\</code> 被解析为<code>\\</code></li>
+</ul>
+<p>经过字符串解析 原本的<code>|\\|\\\\|</code> 变成了<code>|\|\\|</code></p>
+<p>正则表达式解析：</p>
+<ul>
+<li>第一个<code>\|</code>被解析为<code>|</code></li>
+<li><code>\\</code>被解析为<code>\</code></li>
+</ul>
+<p>经过两次解析后  最终的正则表达式变成了<code>||\|</code> 所以实际上是对<code>|\</code>进行了过滤  所以就可以使用<code>\</code>进行绕过了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210045262.png" alt="image-20220821004532200"></p>
+<p>因此解决的办法是在正则过滤中不要添加<code>\\</code>这一项 会导致整个正则表达式直接变味</p>
+<p>这里跟着原帖看发现原帖说的有点问题  自己思考了一下做出了一些猜想 发现是正确的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210048437.png" alt="image-20220821004815392"></p>
+<p>还有原帖中提到的一个问题 这里为什么随便一个字符串甚至是空都可以匹配成功 因为在<code>|\\\\|</code>的左右两边没有东西 为空 所以随便匹配都可以匹配到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210049854.png" alt="image-20220821004919804"></p>
+<p>解决方法就是两边加上东西就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210051570.png" alt="image-20220821005133509"></p>
+<h3 id="自己的小感想"><a href="#自己的小感想" class="headerlink" title="自己的小感想"></a>自己的小感想</h3><p>这道题在网上的wp基本都是直接用<code>\</code>去执行命令 但很少有人能去讨论为什么可以这么绕过 后端代码已经做出了过滤 为什么还是会被绕过 我很幸运能够看到更深的分析 这也是我第一次自己有独立的想法去不断的调试代码 虽然每一次看到其他大佬wp里不合理的地方感觉很迷茫 但是还找不到理由 但是经过不断的调试发现有些其他大佬的东西也不一定就都是对的 而且自己不断调试后找到问题有一种说不出来的成就感 总结起来就是看问题要深入 有耐心 引用原帖的一句话就是</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210057619.png" alt="image-20220821005705584"></p>
+]]></content>
+      <categories>
+        <category>web漏洞</category>
+      </categories>
+      <tags>
+        <tag>php代码审计</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>动态网页基础原理-CGI</title>
     <url>/2022/04/26/%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86-CGI/</url>
     <content><![CDATA[<h1 id="动态网页基础原理-CGI"><a href="#动态网页基础原理-CGI" class="headerlink" title="动态网页基础原理-CGI"></a>动态网页基础原理-CGI</h1><p>以下内容来源于 <a href="https://mp.weixin.qq.com/s/BHYQNDcXXXr7U04lWwQdrg">全面了解CGI、FastCGI、PHP-FPM (qq.com)</a> 想看原文请移步 下面是我自己的总结和扩充</p>

@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>关于转义符在php正则中的匹配问题 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="关于转义符 \ 在php正则中的匹配问题参考文章：从一道CTF的非预期解看PHP反斜杠匹配问题 - 简书 (jianshu.com)
+今天做题遇到一个很经典的问题 记录一下 先看一段代码
+12345,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="关于转义符在php正则中的匹配问题 - y1zh3e7"/>
+    <meta name="twitter:description" content="关于转义符 \ 在php正则中的匹配问题参考文章：从一道CTF的非预期解看PHP反斜杠匹配问题 - 简书 (jianshu.com)
+今天做题遇到一个很经典的问题 记录一下 先看一段代码
+12345,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="关于转义符在php正则中的匹配问题 - y1zh3e7"/>
+    <meta property="og:description" content="关于转义符 \ 在php正则中的匹配问题参考文章：从一道CTF的非预期解看PHP反斜杠匹配问题 - 简书 (jianshu.com)
+今天做题遇到一个很经典的问题 记录一下 先看一段代码
+12345,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">关于转义符在php正则中的匹配问题</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            关于转义符在php正则中的匹配问题
+                        </h1>
+                        <div>
+                            <span>
+                                八月 21, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag">php代码审计</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                关于转义符在php正则中的匹配问题
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    八月 21, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag">php代码审计</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.08.21</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="关于转义符-在php正则中的匹配问题"><a href="#关于转义符-在php正则中的匹配问题" class="headerlink" title="关于转义符 \ 在php正则中的匹配问题"></a>关于转义符 \ 在php正则中的匹配问题</h1><p>参考文章：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/076c5b422c96">从一道CTF的非预期解看PHP反斜杠匹配问题 - 简书 (jianshu.com)</a></p>
+<p>今天做题遇到一个很经典的问题 记录一下 先看一段代码</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$str</span> = <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="variable">$pattern</span> = <span class="string">&quot;/\\/&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$partern</span>,<span class="variable">$str</span>,<span class="variable">$arr</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    <span class="title function_ invoke__">print_r</span>(<span class="variable">$arr</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;false&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 看到这段代码的师傅们 思考一下 会输出success还是false</p>
+<p>输出false 正则没有被匹配到 为什么呢</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202208602.png" alt="image-20220820220805568"></p>
+<h2 id="php对转义符的解析"><a href="#php对转义符的解析" class="headerlink" title="php对转义符的解析"></a>php对转义符的解析</h2><p>php解析正则时分为了两个步骤 一个是php对字符串的解析 之后才是对正则的解析 那么php在解析字符串时什么时候才会将<code>\</code>解析为转义呢 只有在某一字符会对这一语句产生混淆时 php才会将<code>\</code>解析为转义 </p>
+<p>分析一个正则匹配</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202331404.png" alt="image-20220820233147371"></p>
+<p>首先php对字符串进行解析：</p>
+<p>在这种情况下可以看到str中<code>\</code>并没有被当成转义符</p>
+<p>而在pattern中 由于有多个<code>\</code>并且在正则表达式中存在<code>/</code> 会混淆正则表达式的边界 因此这四个转义符的作用分别是：</p>
+<ul>
+<li>第一个转义符转义第二个转义符</li>
+<li>第三个转义符转义第四个转义符 第五个转义符转义<code>/</code> </li>
+</ul>
+<p>因此php最终解析出的str为 <code>\/</code> pattern为 <code>\\/</code></p>
+<p>到preg_match时 进行正则解析（正则解析只解析正则表达式）：</p>
+<ul>
+<li>将pattern中的 <code>\\/</code> 解析为<code>\/</code> （第一个转义符转义了第二个转义符）</li>
+</ul>
+<p>经过php和正则的解析后 我们可以发现str与pattern是一样的字符串了 所以应该会输出success 并且匹配到的部分为<code>\/</code></p>
+<p>验证成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202339177.png" alt="image-20220820233913117"></p>
+<p>这里提出一个问题 如果在pattern中 我的正则内容中不想使用<code>\</code>来转义<code>/</code> 并且还想输出success 那应该怎么修改正则内容呢</p>
+<p>我们刚才提到 转义是为了防止语句中的字符产生混淆 <code>/</code>与正则边界产生了混淆 所以我们用其他的字符作为边界就好了 比如<code>#</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202343736.png" alt="image-20220820234345677"></p>
+<p>总结：在一般情况下 只有字符串中的某一字符会对该语句产生混淆 这时该符号前的<code>\</code>才具有转义作用</p>
+<p>这里我在做测试有一个小坑 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208202348365.png" alt="image-20220820234819307"></p>
+<p>首先php的字符串解析： 可以看到由于字符串中并没有可能会产生混淆语句的字符 因此<code>\</code>都没有转义作用</p>
+<p>正则进行解析（只解析正则表达式 不解析其他字符串）：pattern中的<code>\/</code>被解析成了<code>/</code>  </p>
+<p>因此最终的正则匹配是在字符串<code>\/</code>中匹配<code>/</code> 因此输出了<code>/</code></p>
+<p>这里我一开始以为str中的<code>\</code>也发挥了转义作用 其实并不是</p>
+<p>回到最初的问题 为什么输出了false</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$str</span> = <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="variable">$pattern</span> = <span class="string">&quot;/\\/&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="variable">$partern</span>,<span class="variable">$str</span>,<span class="variable">$arr</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    <span class="title function_ invoke__">print_r</span>(<span class="variable">$arr</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;false&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按照上面的流程分析 </p>
+<p>首先php进行字符串解析：</p>
+<ul>
+<li>str被解析为<code>\</code> pattern被解析为<code>\</code></li>
+</ul>
+<p>进行正则表达式解析：</p>
+<ul>
+<li>pattern中含有转义符<code>\</code> 现在正则需要这个转义符去发挥转义作用 但在正则表达式中已经没有其他字符去转义了 导致了正则表达式的解析错误 pattern最终被解析成了什么我们也不知道</li>
+</ul>
+<p>所以最终在进行正则匹配时会输出false  </p>
+<p>那么我们应该怎么让它输出success呢</p>
+<h2 id="php正则如何正确匹配"><a href="#php正则如何正确匹配" class="headerlink" title="php正则如何正确匹配\"></a>php正则如何正确匹配<code>\</code></h2><p>刚才我们提到在正则解析时只剩下了一个<code>\</code> 导致了解析的错误 那么如果我们在正则解析这步剩下两个<code>\</code>是不是就可以在正则解析中保留下一个<code>\</code>呢？ 再往前推 如果想要正则解析这步里保留两个<code>\</code> 那么在定义partern字符串的时候我们是不是要写四个<code>\</code>才可以？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210016164.png" alt="image-20220821001642109"></p>
+<p>具体的解析过程我就不讲了 跟上面是完全一样的 </p>
+<p>总结：php在正则中匹配<code>\</code>时需要在正则表达式中写入四个<code>\</code></p>
+<h2 id="一道ctf题的分析"><a href="#一道ctf题的分析" class="headerlink" title="一道ctf题的分析"></a>一道ctf题的分析</h2><p>题目来源：[安洵杯 2019]easy_web wp移步主页查找 如果没有就是还没写完</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed|bzmore|bzless|pcre|paste|diff|file|echo|sh|\&#x27;|\&quot;|\`|;|,|\*|\?|\\|\\\\|\n|\t|\r|\xA0|\&#123;|\&#125;|\(|\)|\&amp;[^\d]|@|\||\\$|\[|\]|&#123;|&#125;|\(|\)|-|&lt;|&gt;/i&quot;</span>, <span class="variable">$cmd</span>)) &#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">&quot;forbid ~&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在在这一段代码中对传入的cmd命令进行了过滤 并且可以看到其中有四个反斜杠 对<code>\</code>做出了过滤 但最后仍然可以用反斜线逃逸 <code>ca\t l\s</code>执行命令  这是为什么呢</p>
+<p>按照我们上面所说的进行分析 首先php对字符串进行解析</p>
+<ul>
+<li> <code>\\</code>被解析为<code>\</code></li>
+<li><code>\\\\</code> 被解析为<code>\\</code></li>
+</ul>
+<p>经过字符串解析 原本的<code>|\\|\\\\|</code> 变成了<code>|\|\\|</code></p>
+<p>正则表达式解析：</p>
+<ul>
+<li>第一个<code>\|</code>被解析为<code>|</code></li>
+<li><code>\\</code>被解析为<code>\</code></li>
+</ul>
+<p>经过两次解析后  最终的正则表达式变成了<code>||\|</code> 所以实际上是对<code>|\</code>进行了过滤  所以就可以使用<code>\</code>进行绕过了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210045262.png" alt="image-20220821004532200"></p>
+<p>因此解决的办法是在正则过滤中不要添加<code>\\</code>这一项 会导致整个正则表达式直接变味</p>
+<p>这里跟着原帖看发现原帖说的有点问题  自己思考了一下做出了一些猜想 发现是正确的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210048437.png" alt="image-20220821004815392"></p>
+<p>还有原帖中提到的一个问题 这里为什么随便一个字符串甚至是空都可以匹配成功 因为在<code>|\\\\|</code>的左右两边没有东西 为空 所以随便匹配都可以匹配到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210049854.png" alt="image-20220821004919804"></p>
+<p>解决方法就是两边加上东西就可以了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210051570.png" alt="image-20220821005133509"></p>
+<h3 id="自己的小感想"><a href="#自己的小感想" class="headerlink" title="自己的小感想"></a>自己的小感想</h3><p>这道题在网上的wp基本都是直接用<code>\</code>去执行命令 但很少有人能去讨论为什么可以这么绕过 后端代码已经做出了过滤 为什么还是会被绕过 我很幸运能够看到更深的分析 这也是我第一次自己有独立的想法去不断的调试代码 虽然每一次看到其他大佬wp里不合理的地方感觉很迷茫 但是还找不到理由 但是经过不断的调试发现有些其他大佬的东西也不一定就都是对的 而且自己不断调试后找到问题有一种说不出来的成就感 总结起来就是看问题要深入 有耐心 引用原帖的一句话就是</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202208210057619.png" alt="image-20220821005705584"></p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
