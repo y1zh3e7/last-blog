@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Java反序列化-反射机制篇 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="Java反射篇如果我们有一个类，那么我们可以通过实例化该类的对象并调用其中的方法，或者我们也可以直接调用该类中的静态方法，这是我们在一般情况下调用一个方法时的过程，但是在不同的语言中也有不同的方法可,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Java反序列化-反射机制篇 - y1zh3e7"/>
+    <meta name="twitter:description" content="Java反射篇如果我们有一个类，那么我们可以通过实例化该类的对象并调用其中的方法，或者我们也可以直接调用该类中的静态方法，这是我们在一般情况下调用一个方法时的过程，但是在不同的语言中也有不同的方法可,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="Java反序列化-反射机制篇 - y1zh3e7"/>
+    <meta property="og:description" content="Java反射篇如果我们有一个类，那么我们可以通过实例化该类的对象并调用其中的方法，或者我们也可以直接调用该类中的静态方法，这是我们在一般情况下调用一个方法时的过程，但是在不同的语言中也有不同的方法可,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Java反序列化-反射机制篇</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            Java反序列化-反射机制篇
+                        </h1>
+                        <div>
+                            <span>
+                                九月 18, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">Java反序列化</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" rel="tag">反射机制</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                Java反序列化-反射机制篇
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    九月 18, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">Java反序列化</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" rel="tag">反射机制</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.09.18</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="Java反射篇"><a href="#Java反射篇" class="headerlink" title="Java反射篇"></a><strong>Java反射篇</strong></h1><p>如果我们有一个类，那么我们可以通过实例化该类的对象并调用其中的方法，或者我们也可以直接调用该类中的静态方法，这是我们在一般情况下调用一个方法时的过程，但是在不同的语言中也有不同的方法可以拿到某一个类中的所有内容，在java中我们可以通过“反射”来拿到某一个类中的具体内容 如果把通过new对象并且调用其中的方法的过程叫做“正射”，那么不使用new来创建对象并调用其中方法的过程就叫做“反射”</p>
+<h2 id="反射常用到的方法"><a href="#反射常用到的方法" class="headerlink" title="反射常用到的方法"></a><strong>反射常用到的方法</strong></h2><p>在java的lang包中有一个静态Class类 在java程序运行并编译加载一个类时，java.lang.Class就会实例化出一个对象，这个对象储存该类的所有信息 因此我们可以通过一些方法来获取到这个类的信息 先了解一些方法</p>
+<ul>
+<li><code>Class.forName(classname)</code> 获取classname类中的所有属性包括类名 比如<code>Class clazz = Class.forName(&quot;java.lang.Runtime&quot;);</code></li>
+</ul>
+<p>那么类clazz中就得到了java.lang.Runtime中的所有属性  </p>
+<ul>
+<li><p><code>Class.newInstance()</code>实例化对象，并触发该类的构造方法 下面会详细解释</p>
+</li>
+<li><p><code>Class.getMethod(method name,arg)</code> 获取一个对象中的public方法，由于java支持方法的重载，所以需要第二参数作为获取的方法的形参列表，这样就可以确定获取的是哪一个方法</p>
+</li>
+<li><p><code>Method.invoke</code>() 执行方法，如果是一个普通方法，则invoke的第一个参数为该方法所在的对象，如果是静态方法则第一个参数是null或者该方法所在的类 第二个参数为要执行方法的参数</p>
+</li>
+</ul>
+<p><code>forName</code>并不是唯一获取一个类的方式，其他方式还有：</p>
+<ul>
+<li>obj.getClass() 如果上下文中存在某个类的实例obj，那我们可以直接通过obj.getClass来获取它的类</li>
+<li>Y1.class 如果已经加载了一个类Y1，只是想获取到它由java.lang.class所创造的对象，那么就直接使用这种方法获取即可，这种方法并不属于反射</li>
+<li>Class.Forname 如果知道某个类的名字，想获取到这个类，就可以使用forName来获取</li>
+</ul>
+<h3 id="关于forname"><a href="#关于forname" class="headerlink" title="关于forname"></a><strong>关于forname</strong></h3><p>默认情况下 <code>forName</code>的第一个参数是类名，第二个参数表示是否初始化，第三个参数就是ClassLoader</p>
+<p>ClassLoader是一个“加载器”，告诉java虚拟机如何加载这个类，java默认的ClassLoader就是根据类名加载类，这个类名必须是完整路径，比如上面提到的java.lang.Runtime</p>
+<p>第二个参数<code>initialize</code>用于forname时的初始化，一般我们会认为初始化就是加载类的构造函数，其实并不是，这里提到的初始化有以下过程：</p>
+<p>看下面这个类：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TrainPrint</span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Empty block inittial &amp;s\n&quot;</span>, <span class="built_in">this</span>.getClass());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Static initial %s\n&quot;</span>, TrainPrint.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TrainPrint</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Innitial %s\n&quot;</span>, <span class="built_in">this</span>.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个类中一共有三个代码块 ，在进行初始化时按照以下优先级调用代码块</p>
+<ol>
+<li>static{}</li>
+<li>{}</li>
+<li>构造函数</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209141644920.png" alt="image-20220914164424794"></p>
+<p>其中，static{}就是在“类初始化”时调用的，而{}中的代码会放在构造函数的<code>super()</code>后面，但在当前构造函数内容的前面</p>
+<p>所以<code>forNmae</code>中的<code>initialize=true</code>其实就是告诉jvm是否执行“类初始化”</p>
+<p>那么 如果有以下方法 其中的参数name可控：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ref</span><span class="params">(String name)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">		Class.forName(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们就可以编写一个恶意类，将恶意代码放置在<code>static&#123;&#125;</code>中，从而执行：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PayLoad</span>&#123;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="type">Runtime</span> <span class="variable">rt</span> <span class="operator">=</span> Runtime.getRuntime();</span><br><span class="line">            String[] commands = &#123;<span class="string">&quot;touch&quot;</span>, <span class="string">&quot;/etc/passwd&quot;</span>&#125;;</span><br><span class="line">            <span class="type">Process</span> <span class="variable">pc</span> <span class="operator">=</span> rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<h2 id="如何通过反射执行命令"><a href="#如何通过反射执行命令" class="headerlink" title="如何通过反射执行命令"></a><strong>如何通过反射执行命令</strong></h2><p>我们刚才提到，如果想拿到一个类，需要先import才能使用，而使用forname就不需要了，这样我们就可以利用forname加载任意类。</p>
+<p>在java中是支持内部类的，比如我们在普通类 c1中编写内部类c2，在编译时会生成两个文件：c1.class和c1$c2.class，这两个类之间可以看作没有关联，通过<code>Class.forname(&quot;c1$c2&quot;)</code>即可加载这个内部类，当fastjson在<code>checkAutotype</code>时就会先讲$替换成<code>.</code> 上面说到的<code>$</code>的作用时查找内部类。</p>
+<p>当我们通过反射获取到一个类之后，可以继续通过反射来调用其中的属性和方法，也可以继续实例化这个类，调用其中的方法，也就是用<code>newInstance()</code></p>
+<p>上面提到过newInstance会实例化类，并且触发它的构造方法，所以在一些情况下newInstance是不能成功执行的，比如</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>,String.class).invoke(clazz.newInstance(), <span class="string">&quot;id&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209181327117.png" alt="image-20220918132704986"></p>
+<p>我们分析上面两行代码，首先通过反射将<code>java.lang.Runtime</code>中的所有属性和方法存到了clazz中，继续利用反射拿到clazz（Runtime）中的<code>exec</code>方法，最后使用invoke执行该方法，问题就出在乐invoke的参数上。</p>
+<p>我们上面提到了invoke执行方法，第一个参数是该方法所在的对象或者类，也就是说我们需要通过<code>clazz.newInstance</code>来实例化clazz，作为invoke的参数，但clazz的构造函数来自于Runtime，我们看一下Runtime的构造函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209181331852.png" alt="image-20220918133118801"></p>
+<p>Runtime的构造方法为私有，所以在newInstance时才会报错。</p>
+<p>这里P神的<strong>java安全漫谈</strong>里说明了为什么要将构造方法设为私有，这就是很常见的“单例模式”。</p>
+<p>比如对于web应用来说，数据库只需要建立一次链接，而不是每次用到数据库都要建立一次新的连接，作为开发者就可以将数据库连接使用的构造函数设为私有，然后编写一个静态方法来获取：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrainDB</span>() &#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="type">TrainDB</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TrainDB</span>();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> TrainDB <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="title function_">TrainDB</span><span class="params">()</span> &#123;</span><br><span class="line">	<span class="comment">// 建立连接的代码</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个类初始化时，就会在类内部实例化出一个连接数据库的对象，我们在需要数据库连接时，只需要调用其中的<code>getInstance()</code>方法获取这个对象即可。</p>
+<p>回到如何执行命令上，如果不能通过实例化调用方法，我们就可以尝试继续通过反射来调用方法，我们将代码改成下面这样就可以了：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forname(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>,String.class).invoke(clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>).invoke(clazz),<span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>我们在刚开始执行命令时就用到了Runtime来获取其中的<code>exec</code>方法，不难看出它和python的os类似，给我们提供了一些可以执行命令的方法，那么Runtime到底有什么作用？<br>每当我们执行一个java程序时，Runtime类都会生成一个实例，来储存当前运行的java程序的相关信息，我们可以通过Runtime类中的<code>getRuntime()</code>方法来调用当前java程序的运行环境，这样就可以在执行系统命令时让jvm知道我们要对哪个java程序执行命令</p>
+<p>我们分析以下上面执行命令的两行代码</p>
+<ul>
+<li>通过反射获得Runtime类</li>
+<li>通过反射获得clazz(Runtime)中的<code>exec</code>方法</li>
+<li><code>invoke()</code>调用exec方法</li>
+<li>调用<code>getRuntime()</code>将当前java程序运行的环境作为参数传递给invoke，并执行命令<code>exec &quot;calc.exe&quot;</code></li>
+</ul>
+<p>可以发现我们在用invoke执行Runtime中的命令时，如果不能通过<code>newInstance</code>来实例化对象作为参数，我们可以通过调用<code>getRuntime()</code>来获取当前环境，从而代替invoke的第一个参数。</p>
+<p>上面执行命令的两行代码分解开就是：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forname(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line"><span class="type">Method</span> <span class="variable">execMethod</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;exec&quot;</span>, String.class);</span><br><span class="line"><span class="type">Method</span> <span class="variable">getRuntime</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>)；</span><br><span class="line"><span class="type">Object</span> <span class="variable">currentRuntime</span> <span class="operator">=</span> getRuntime.invoke(clazz);</span><br><span class="line">execMethod.invoke(currentRuntime, <span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他调用反射的方法"><a href="#其他调用反射的方法" class="headerlink" title="其他调用反射的方法"></a>其他调用反射的方法</h2><ul>
+<li>我们刚才说到可以通过forname拿到了一个类，并且继续利用反射或实例化调用其中的方法，如果一个类没有无参构造方法或者也没有类似单例模式里的静态方法，那我们应该怎样通过反射实例化该类呢？</li>
+<li>如果一个方法或构造方法是私有方法，我们应该怎么去执行它呢？</li>
+</ul>
+<p>第一个问题，我们可以用一个新的反射方法<code>getConstructor</code>。</p>
+<p>和getMethod类似，<code>getConstructor</code>接收的参数是构造函数的的列表类型，因为构造函数也支持重载，所以要用参数列表类型才能唯一确定一个构造函数</p>
+<p>比如我们常用的另一种执行命令的方式ProcessBuilder，我们使用反射来获取其构造函数，然后 调用<code>start()</code>来执行命令</p>
+<p><strong>ProcessBuilder:</strong></p>
+<p>ProcessBuilder用于创建操作系统进程，它提供一种启动和管理进程（也就是应用程序）的方法，我们可以通过实例化这个类并且通过反射调用其中的start方法来开启一个子进程 </p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="true"
+        data-ci="1d5fd913f7fe5a8670b4"
+        data-cs="c09331be3bb58081b750befe589e10d1f1ed56b0"
+        data-r="y1zh3e7.github.io"
+        data-o="y1zh3e7"
+        data-a="y1zh3e7"
+        data-d="true"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
