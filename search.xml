@@ -195,7 +195,7 @@
   </entry>
   <entry>
     <title>Java反序列化-反射机制篇</title>
-    <url>/2022/09/18/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%AF%87/</url>
+    <url>/2022/09/20/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%AF%87/</url>
     <content><![CDATA[<h1 id="Java反射篇"><a href="#Java反射篇" class="headerlink" title="Java反射篇"></a><strong>Java反射篇</strong></h1><p>如果我们有一个类，那么我们可以通过实例化该类的对象并调用其中的方法，或者我们也可以直接调用该类中的静态方法，这是我们在一般情况下调用一个方法时的过程，但是在不同的语言中也有不同的方法可以拿到某一个类中的所有内容，在java中我们可以通过“反射”来拿到某一个类中的具体内容 如果把通过new对象并且调用其中的方法的过程叫做“正射”，那么不使用new来创建对象并调用其中方法的过程就叫做“反射”</p>
 <h2 id="反射常用到的方法"><a href="#反射常用到的方法" class="headerlink" title="反射常用到的方法"></a><strong>反射常用到的方法</strong></h2><p>在java的lang包中有一个静态Class类 在java程序运行并编译加载一个类时，java.lang.Class就会实例化出一个对象，这个对象储存该类的所有信息 因此我们可以通过一些方法来获取到这个类的信息 先了解一些方法</p>
 <ul>
@@ -256,7 +256,7 @@
 <p>回到如何执行命令上，如果不能通过实例化调用方法，我们就可以尝试继续通过反射来调用方法，我们将代码改成下面这样就可以了：</p>
 <figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forname(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>,String.class).invoke(clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>).invoke(clazz),<span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<p>我们在刚开始执行命令时就用到了Runtime来获取其中的<code>exec</code>方法，不难看出它和python的os类似，给我们提供了一些可以执行命令的方法，那么Runtime到底有什么作用？<br>每当我们执行一个java程序时，Runtime类都会生成一个实例，来储存当前运行的java程序的相关信息，我们可以通过Runtime类中的<code>getRuntime()</code>方法来调用当前java程序的运行环境，这样就可以在执行系统命令时让jvm知道我们要对哪个java程序执行命令</p>
+<p>我们在刚开始执行命令时就用到了Runtime来获取其中的<code>exec</code>方法，不难看出它和python的os类似，给我们提供了一些可以执行命令的方法，那么Runtime到底有什么作用？<br>每当我们执行一个java程序时，Runtime类都会生成一个实例，来储存当前运行的java程序的相关信息，我们可以通过Runtime类中的<code>getRuntime()</code>方法来调用当前java程序的运行环境（也就是上面提到的储存相关信息的实例），这样就可以在执行系统命令时让jvm知道我们要对哪个java程序执行命令</p>
 <p>我们分析以下上面执行命令的两行代码</p>
 <ul>
 <li>通过反射获得Runtime类</li>
@@ -268,23 +268,89 @@
 <p>上面执行命令的两行代码分解开就是：</p>
 <figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forname(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line"><span class="type">Method</span> <span class="variable">execMethod</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;exec&quot;</span>, String.class);</span><br><span class="line"><span class="type">Method</span> <span class="variable">getRuntime</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>)；</span><br><span class="line"><span class="type">Object</span> <span class="variable">currentRuntime</span> <span class="operator">=</span> getRuntime.invoke(clazz);</span><br><span class="line">execMethod.invoke(currentRuntime, <span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<h2 id="其他调用反射的方法"><a href="#其他调用反射的方法" class="headerlink" title="其他调用反射的方法"></a>其他调用反射的方法</h2><ul>
+<h2 id="一些其他的反射机制"><a href="#一些其他的反射机制" class="headerlink" title="一些其他的反射机制"></a><strong>一些其他的反射机制</strong></h2><ul>
 <li>我们刚才说到可以通过forname拿到了一个类，并且继续利用反射或实例化调用其中的方法，如果一个类没有无参构造方法或者也没有类似单例模式里的静态方法，那我们应该怎样通过反射实例化该类呢？</li>
 <li>如果一个方法或构造方法是私有方法，我们应该怎么去执行它呢？</li>
 </ul>
-<p>第一个问题，我们可以用一个新的反射方法<code>getConstructor</code>。</p>
+<h3 id="利用ProcessBuilder执行命令"><a href="#利用ProcessBuilder执行命令" class="headerlink" title="利用ProcessBuilder执行命令"></a><strong>利用<code>ProcessBuilder</code>执行命令</strong></h3><p>第一个问题，我们可以用一个新的反射方法<code>getConstructor</code>。</p>
 <p>和getMethod类似，<code>getConstructor</code>接收的参数是构造函数的的列表类型，因为构造函数也支持重载，所以要用参数列表类型才能唯一确定一个构造函数</p>
 <p>比如我们常用的另一种执行命令的方式ProcessBuilder，我们使用反射来获取其构造函数，然后 调用<code>start()</code>来执行命令</p>
 <p><strong>ProcessBuilder:</strong></p>
-<p>ProcessBuilder用于创建操作系统进程，它提供一种启动和管理进程（也就是应用程序）的方法，我们可以通过实例化这个类并且通过反射调用其中的start方法来开启一个子进程 </p>
+<p>ProcessBuilder用于创建操作系统进程，它提供一种启动和管理进程（也就是应用程序）的方法，我们可以通过实例化这个类并且通过反射调用其中的start方法来开启一个子进程 ，我们可以理解成当<code>getRuntime</code>被禁用时，可以用<code>ProcessBuilder</code>来执行命令。</p>
+<p><code>ProcessBuilder</code>有两个构造函数：</p>
+<ul>
+<li><code>public ProcessBuilder(List&lt;String&gt; command)</code></li>
+<li><code>public ProcessBuilder(String... commang)</code></li>
+</ul>
+<p>我们用<code>ProcessBuilder</code>写一个执行命令的payload：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>);</span><br><span class="line">((ProcessBuilder)clazz.getConstructor(List.class).newInstance(Arrays.asList(<span class="string">&quot;calc.exe&quot;</span>))).start();</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>首先利用反射获取<code>ProcessBuilder</code>类；</p>
+</li>
+<li><p>获取clazz(ProcessBuilder)形参列表为<code>List&lt;String&gt; command</code>的构造函数；</p>
+</li>
+<li><p>将获取到的构造函数利用newInstance进行实例化，调用构造函数；</p>
+</li>
+<li><p>对构造函数传入的参数为 <code>calc.exe</code>，并且用<code>Arrays.asList</code>方法将要执行的命令转为List类型；</p>
+</li>
+<li><p>返回List类型的<code>command</code>；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209201439885.png" alt="image-20220920143924800"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209201440303.png" alt="image-20220920144048266"></p>
+<ol start="4">
+<li><p>将List类型的command强制转换为<code>ProcessBuilder</code>类型，这样就可以调用<code>ProcessBuilder</code>中的start方法打开<code>calc.exe</code>进程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209201442162.png" alt="image-20220920144234096"></p>
+</li>
+</ol>
+<p>可以看到这个方法需要用到强转，但有时候在利用漏洞时并没有这种语法，所以我们接着利用反射来完成这一步</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>); clazz.getMethod(<span class="string">&quot;start&quot;</span>).invoke(clazz.getConstructor(List.class).newInstance(Arrays.asList(<span class="string">&quot;calc.exe&quot;</span>)));</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>forName获取类；</li>
+<li>获取clazz中的<code>start</code>方法；</li>
+<li>用invoke执行start方法，这里我们之前说过用invoke执行方法时，第一个参数要是该方法所在类的对象，但clazz中没有无参构造方法，所以invoke的第一个参数不能是<code>clazz.newInstance</code>，所以这里我们换个方法，通过<code>getConstructor</code>获取到<code>ProcessBuilder</code>的构造函数，并利用这个构造函数<code>newInstance</code>，在实例化的同时对构造方法传入参数<code>calc.exe</code>，因为我们刚才提到了<code>ProcessBuilder</code>是没有无参构造函数的，所以在实例化的时候必须要传入参数。（这里获取的构造方法依然是上面提到的形参列表为List的构造函数）</li>
+</ol>
+<p>那么我们再来看<code>ProcessBuilder</code>的另一个构造方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209201459962.png" alt="image-20220920145946921"></p>
+<p>我们看到这个构造方法的参数列表为<code>String... command</code>，这个参数列表的意思其实就是参数数量可变列表，当我们在写一个方法时，不知道要传入多少参数，我们就可以写成<code>Type... Args</code>的方式，其实在底层来看<code>String... command</code>这样的写法就等效于<code>String[] command</code>，相当于传入了一个字符数组</p>
+<p>比如有一个hello方法：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hello</span><span class="params">(String...names)</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们有一个数组想传给y1方法，只需要直接传就行：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">String[] names = &#123;<span class="string">&quot;hello&quot;</span>, <span class="string">&quot;world&quot;</span>&#125;;</span><br><span class="line">hello(names)</span><br></pre></td></tr></table></figure>
+
+<p>所以如果我们想要获取到参数列表为<code>String... command </code>的这个构造方法，我们在<code>getConstructor</code>时要传入的参数为<code>String[].class</code>，在调用newInstance时，因为这个构造方法本身接受的就是一个可变长数组，我们在传入时也传入了一个数组，因此叠加起来是一个二维数组，所以利用这个构造方法的payload如下：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>);</span><br><span class="line">((ProcessBuilder)clazz.getConstructor(String[].class).newInstance(<span class="keyword">new</span> <span class="title class_">String</span>[]&#123;&#123;<span class="string">&quot;calc.exe&quot;</span>&#125;&#125;)).start();</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>反射拿到类；</li>
+<li><code>getConstructor</code>拿到参数列表为<code>String... command</code>的构造方法；</li>
+<li><code>newInstance</code>触发该构造方法，并且传入一个二维字符数组；</li>
+<li>由于返回的command是字符数组类型，所以强转为<code>ProcessBuilder</code>并用<code>start()</code>方法触发；</li>
+</ol>
+</li>
+</ol>
+<h3 id="如何通过反射执行私有方法"><a href="#如何通过反射执行私有方法" class="headerlink" title="如何通过反射执行私有方法"></a>如何通过反射执行私有方法</h3><p>再回到第二个问题上，如果一个方法或构造方法是private，我们是否能执行它呢？</p>
+<p>这里就要用到<code>getDeclared</code>系列的反射了，与普通的<code>getMethod，getConstructor</code>区别是：</p>
+<ul>
+<li><code>getMethod</code>系列方法获取的是当前类中所有公共方法，包括从父类继承的方法；</li>
+<li><code>getDeclaredMethod</code>系列方法获取的是当前类中“声明”的方法，是实写在这个类里的，包括私有的方法，但从父类里继承来的就不包含了</li>
+</ul>
+<p>在用法上<code>getDeclaredMethod</code>的具体用法与<code>getMethod</code>类似，<code>getDeclaredConstructor</code>的具体用法和<code>getConstructor</code>类似</p>
+<p>举个例子，我们之前提到过Runtime的构造方法是私有的，所以我们要通过<code>Runtime.getRuntime()</code>来获取对象，其实我们也可以直接用<code>getDeclaredConstructor</code>来获取这个私有的构造方法实例化对象，进而执行命令：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">m</span> <span class="operator">=</span>clazz.getDeclaredConstructor();</span><br><span class="line">        m.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        clazz.getMethod(<span class="string">&quot;exec&quot;</span>,String.class).invoke(m.newInstance(), <span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这里我们在获取到私有方法后，要用<code>setAccessible()</code>方法使这个私有方法可以被访问，其他的就和之前介绍的反射一样了，如果不用<code>setAccessible()</code>方法修改作用域这个方法是仍然不能调用的</p>
+<p>——————————————————————————————————————————————————————</p>
+<p>​                                                                                <strong>java反序列化反射篇结束！</strong></p>
 ]]></content>
       <categories>
-        <category>Web</category>
+        <category>Web漏洞</category>
         <category>Java</category>
       </categories>
       <tags>
         <tag>Java反序列化</tag>
-        <tag>反射机制</tag>
+        <tag>Java反射机制</tag>
       </tags>
   </entry>
   <entry>
