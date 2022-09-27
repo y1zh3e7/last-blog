@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Java反序列化入门篇 - y1zh3e7</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="y1zh3e7,"> 
+    <meta name="description" content="Java反序列化入门篇参考文章：Java反序列化基础篇-01-反序列化概念与利用 - FreeBuf网络安全行业门户
+​                    《Java安全漫谈》
+Java IO在,"> 
+    <meta name="author" content="y1zh3e7"> 
+    <link rel="alternative" href="atom.xml" title="y1zh3e7" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Java反序列化入门篇 - y1zh3e7"/>
+    <meta name="twitter:description" content="Java反序列化入门篇参考文章：Java反序列化基础篇-01-反序列化概念与利用 - FreeBuf网络安全行业门户
+​                    《Java安全漫谈》
+Java IO在,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="y1zh3e7"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="Java反序列化入门篇 - y1zh3e7"/>
+    <meta property="og:description" content="Java反序列化入门篇参考文章：Java反序列化基础篇-01-反序列化概念与利用 - FreeBuf网络安全行业门户
+​                    《Java安全漫谈》
+Java IO在,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/site.css">
+
+    
+<!-- 代码块复制 -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard@latest/dist/clipboard.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">y1zh3e7</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://y1zh3e7.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Java反序列化入门篇</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover">
+        
+            <img src="/img/cover.jpg" />
+            
+                    <div class="post_cover_mask"></div>
+                    <div class="post_text">
+                        <h1>
+                            Java反序列化入门篇
+                        </h1>
+                        <div>
+                            <span>
+                                九月 27, 2022
+                            </span>
+
+                            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">Java反序列化</a></li></ul>
+
+
+                        </div>
+                    </div>
+    </div>
+    
+
+            <div class="article">
+                <div class='main'>
+                    <!-- 帖子视图 -->
+                    
+                            <h1 class="title">
+                                Java反序列化入门篇
+                            </h1>
+                            <div class="stuff">
+                                <span>
+                                    九月 27, 2022
+                                </span>
+                                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">Java反序列化</a></li></ul>
+
+
+                            </div>
+
+
+                            <!-- 更新时间 -->
+                            <div class="updated">
+                                <div></div>
+                                <span>该文章更新于 2022.09.27</span>
+                            </div>
+
+                            <div class="content markdown">
+                                <h1 id="Java反序列化入门篇"><a href="#Java反序列化入门篇" class="headerlink" title="Java反序列化入门篇"></a><strong>Java反序列化入门篇</strong></h1><p>参考文章：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/333697.html">Java反序列化基础篇-01-反序列化概念与利用 - FreeBuf网络安全行业门户</a></p>
+<p>​                    《Java安全漫谈》</p>
+<h2 id="Java-IO"><a href="#Java-IO" class="headerlink" title="Java IO"></a><strong>Java IO</strong></h2><p>在学习Java反序列化之前我们先要了解一下Java的输入输出流：</p>
+<p>java的IO流分为了<strong>文件IO流（FileInput/OutputStream）</strong>和<strong>对象IO流（ObjectInput/OutputStream）</strong>，从名字上就可以看出来一个是用来对文件进行输入和输出，一个是对对象进行输入和输出。</p>
+<p>流的传输过程：</p>
+<p>首先不管是输入还是输出，传输的两端都是文件和java的运行程序，所以如果想要在这二者之间进行传输，我们就需要将他们两个之间搭起来一个可以传输的通道，这样就可以实现流的传输。</p>
+<ul>
+<li>输出流（OutputStream）：</li>
+</ul>
+<p>如果我们想对一个文件进行写入操作，那么实质上是在java程序中将流（想要写入的内容）输出到目的文件中，所以流的方向是从java输出到文件，举个对文件写入一个对象的例子：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;filename&quot;</span>));</span><br><span class="line">oos.writeObject(obj);</span><br></pre></td></tr></table></figure>
+
+<p>首先用<code>new FileOutputStream</code>创建一个文件输出流，再用<code>new ObjectOutputStream</code>创建一个对象输出流（因为oos是对象输出流类型），这时我们就可以在java程序中向外（文件）输出流（内容）了，画成图大概是这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209271524379.jpg" alt="QQ图片20220927152058"></p>
+<p>当我们要给这个文件传一个obj对象时，就会从java程序顺着这条通道进入到file中。</p>
+<ul>
+<li>输入流（InputStream）</li>
+</ul>
+<p>其实输入流和输出流构建出传输通道的方法几乎是一样的，区别就是流的输出方向是从file指向了java程序，所以如果想要read这个文件我们就要用输入流将file输入到java程序中进行读取。</p>
+<h2 id="Java序列化和反序列化的过程"><a href="#Java序列化和反序列化的过程" class="headerlink" title="Java序列化和反序列化的过程"></a><strong>Java序列化和反序列化的过程</strong></h2><p>首先为什么要进行序列化和反序列化，在程序运行结束后，这个程序里的对象都会被删除，并且对象的构成很复杂，传输起来非常不方便。如果我们想要让某些对象持久的保存下来并利于传输，我们就可以将这些对象进行序列化成一串数据，保存在某个地方，在需要用到这个对象时再反序列化让这一串数据还原成一个对象。看到一个很生动的比喻，想把一张桌子搬进门里，如果不能通过，我们就可以将这个桌子拆开（序列化），在搬进去之后再将桌子组装回去（序列化），这就是序列化和反序列化。</p>
+<p>与php反序列化不同的是php序列化和反序列化提供了关键字<code>serialize和unserialize</code>，但java并没有这种api，我们刚才提到了Java的IO，那么它和Java的序列化和反序列化之间有什么关系呢，我们刚才说序列化就是将对象转换为一串字节数据并保存起来，那么这个过程的实现其实就是依靠java的输出，将这个对象从java程序里以字节数据流的形式输出到java的外部，相对的反序列化其实就是依靠java的输入，将java外的字节数据流输入到java程序中，最终经过一些处理还原为对象。也就是说java中的序列化和反序列化是需要开发人员自己写出整个过程。这里提供两段使用javaIO进行序列化和反序列化的代码（如果要完成整个序列化和反序列化的过程，还需要其他方法参与构建，如readObject和writeObject，下面会提到），假设ser.bin是我们用来储存序列化后字节数据流的文件：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 要序列化和反序列化的类 **/</span></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 序列化 **/</span></span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutput;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializationTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">serialize</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> IOException&#123;</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;ser.bin&quot;</span>));</span><br><span class="line">        oos.writeObject(obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;aa&quot;</span>,<span class="number">22</span>);</span><br><span class="line">        System.out.println(person);</span><br><span class="line">        serialize(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 反序列化 **/</span></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnserializeTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">unserialize</span><span class="params">(String Filename)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException&#123;</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(Filename));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> ois.readObject();</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> (Person)unserialize(<span class="string">&quot;ser.bin&quot;</span>);</span><br><span class="line">        System.out.println(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出后可以发现在序列化之前输出对象person和在反序列化后输出都调用了<code>__toString</code>，成功构造了序列化和反序列化。</p>
+<h2 id="php和Java反序列化之间的区别"><a href="#php和Java反序列化之间的区别" class="headerlink" title="php和Java反序列化之间的区别"></a>php和Java反序列化之间的区别</h2><p>在php的序列化和反序列化中提供了serialize和unserialize函数，可以直接将对象序列化为一串数据或直接将一串数据反序列化为一个对象，程序员在这个过程中是无法参与的，但在Java中，需要程序员自己来构建序列化和反序列化的过程，php在反序列化时会自动触发<code>__wakeup</code>函数，java在反序列化时会自动触发<code>readObject</code>方法，虽然都是在反序列化时触发，但二者之间有一些细微的差别。</p>
+<p>php反序列化（对一个数据库链接对象反序列化）：</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Connection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$link</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;dsn = dsn;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;username = username;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password = password;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;link = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="variable">$this</span>-&gt;dsn, <span class="variable">$this</span>-&gt;username, <span class="variable">$this</span>-&gt;password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果我们直接输出序列化后的这个Connection类的对象，发现输出为null，那么在反序列化时也是null，因为在php中资源类型的对象默认不会写入序列化数据中。</p>
+<p>如果我们将代码改成下面这样就可以在序列化后在<code>$link</code>中拿到一个数据库连接了：</p>
+<figure class="highlight php"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Connection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$link</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;dsn = dsn;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;username = username;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password = password;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;link = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="variable">$this</span>-&gt;dsn, <span class="variable">$this</span>-&gt;username, <span class="variable">$this</span>-&gt;password);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__sleep</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">&#x27;dsn&#x27;</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Connection的对象被反序列化后调用<code>__wakeup</code>，执行connect函数连接数据库，所以<code>__wakeup</code>的作用其实是反序列化后执行一些初始化操作，但在php中很少利用序列化数据传输资源类型的对象，而其他类型的对象在反序列化的时候已经把值写死了，所以php的反序列化漏洞中很少是由<code>__wakeup</code>这个方法触发的，通常触发在<code>__destruct</code>中。</p>
+<p>Java反序列化：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    Person(String name,<span class="type">int</span> age)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeObject</span><span class="params">(java.io.ObjectOutputStream s)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        s.defaultWriteObject();</span><br><span class="line">        s.writeObject(<span class="string">&quot;This is a Object&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeObject</span><span class="params">(java.io.ObjectInputStream s)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        s.defaultReadObject();</span><br><span class="line">        <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> (String) s.readObject();</span><br><span class="line">        System.out.println(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>writeObject</code>中，当传入的对象完成了从<code>ObjectOutputStream</code>中继承来的<code>defaultWriteObject</code>后，向流内写入了一个”This is a Object”，因此会在序列化后触发改方法，将字符串写入输出流的对象中，用知识星球里提到的工具SerializationDumper可以看到这个字符串被写到了objectAnnotation位置，在反序列化还原对象时就会将这个字符串输出。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202209272017826.png" alt="image-20220927201757748"></p>
+<p>反序列化的过程是根据开发者的想法来实现的，所以总结一下<code>__wakeup</code>和<code>readObject</code>的不同就是：<code>readObject</code>倾向于解决”反序列化时如何还原一个完整对象”这个问题，而PHP的<code>__wakeup</code>更倾向于解决反序列化后如何初始化这个对象的问题。</p>
+
+                                    <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+                                    <audio id="audio" loop="1" preload="auto" controls="controls"
+                                        data-autoplay=" false">
+                                        <source type="audio/mpeg" src="">
+                                    </audio>
+                                    
+                                        <ul id="audio-list" style="display:none">
+                                            
+                                                
+                                                    <li title="0" data-url="https://link.hhtjim.com/163/526101268.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="1" data-url="https://link.hhtjim.com/163/526101451.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="2" data-url="https://link.hhtjim.com/163/526098988.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="3" data-url="https://link.hhtjim.com/163/526105244.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="4" data-url="https://link.hhtjim.com/163/543772350.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="5" data-url="https://link.hhtjim.com/163/1454025662.mp3"></li>
+                                                    
+                                                            
+                                                
+                                                    <li title="6" data-url="https://link.hhtjim.com/qq/004cNNNW0QG6RR.mp3"></li>
+                                                    
+                                                            
+                                        </ul>
+                                        
+                            </div>
+                            
+    <div id="gitalk-container" class="comment link"
+		data-enable="true"
+        data-ae="true"
+        data-ci="1d5fd913f7fe5a8670b4"
+        data-cs="c09331be3bb58081b750befe589e10d1f1ed56b0"
+        data-r="y1zh3e7.github.io"
+        data-o="y1zh3e7"
+        data-a="y1zh3e7"
+        data-d="true"
+    >查看评论</div>
+
+
+                </div>
+                
+            </div>
+    </div>
+</div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
